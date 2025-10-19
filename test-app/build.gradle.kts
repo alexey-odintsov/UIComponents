@@ -20,6 +20,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.kotlin.datetime)
+            implementation(project(":library"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -27,7 +28,6 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
-            implementation(project(":library"))
         }
     }
 }

@@ -1,8 +1,11 @@
 package alexey.odintsov.kmp.uicomponents.testapp
 
+import alexey.odintsov.kmp.uicomponents.table.TableCell
+import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -16,7 +19,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
+    ThemeManager.AppTheme {
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
@@ -24,8 +27,13 @@ fun App() {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Button(onClick = {  }) {
-                Text("Click me!")
+            Button(onClick = {
+                ThemeManager.setIsDark(!ThemeManager.isDark)
+            }) {
+                Text("Change theme to ${if (ThemeManager.isDark) "light" else "dark"}!")
+            }
+            TableCell(modifier = Modifier.fillMaxWidth()) {
+                Text("Table cell")
             }
         }
     }

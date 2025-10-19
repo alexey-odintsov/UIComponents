@@ -17,6 +17,28 @@ version = "0.0.1"
 kotlin {
     jvm()
 
+    androidLibrary {
+        namespace = "alexey.odintsov.kmp.charts"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+
+        withJava() // enable java compilation support
+        withHostTestBuilder {}.configure {}
+        withDeviceTestBuilder {
+            sourceSetTreeName = "test"
+        }
+
+        compilations.configureEach {
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(
+                        JvmTarget.JVM_11
+                    )
+                }
+            }
+        }
+    }
+
     sourceSets {
         commonMain.dependencies {
             implementation(compose.runtime)
