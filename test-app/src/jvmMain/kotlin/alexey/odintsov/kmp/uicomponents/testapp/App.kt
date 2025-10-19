@@ -1,7 +1,9 @@
 package alexey.odintsov.kmp.uicomponents.testapp
 
+import alexey.odintsov.kmp.uicomponents.StatusBar
 import alexey.odintsov.kmp.uicomponents.table.TableCell
 import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +34,10 @@ fun App() {
             TableCell(modifier = Modifier.fillMaxWidth()) {
                 Text("Table cell")
             }
+            Box(Modifier.weight(1f)) {
+
+            }
+            StatusBar(progress = 0.5f, statusText = "Loading")
         }
     }
 }
