@@ -37,3 +37,8 @@ compose.desktop {
         mainClass = "alexey.odintsov.kmp.uicomponents.testapp.MainKt"
     }
 }
+
+//compose.resources {
+//    publicResClass = true
+//    packageOfResClass = "testApp.resources"
+//}

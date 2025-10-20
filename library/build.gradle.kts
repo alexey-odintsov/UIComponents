@@ -73,3 +73,8 @@ kotlin {
         }
     }
 }
+
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "alexey.odintsov.kmp.uicomponents.resources"
+}
