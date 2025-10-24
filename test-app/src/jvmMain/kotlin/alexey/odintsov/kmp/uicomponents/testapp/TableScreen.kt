@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 data class LogItem(
@@ -30,15 +31,12 @@ data class LogItem(
 
 @Composable
 fun TableScreen() {
-    val tags = listOf("System", "Monitoring", "App")
-    val items = remember {
-        (1..100).map {
-            val tag = tags.random()
-            val message = ('A'..'z').map { it }.shuffled().subList(0, 40).joinToString("")
-            LogItem(System.currentTimeMillis(), tag, message)
-        }
+    val viewModel: TableScreenViewModel = viewModel {
+        TableScreenViewModel()
     }
-
+    val columns = viewModel.columns
+    val items = viewModel.items
+    val onColumnResized = viewModel::onColumnResized
     val scrollState = remember { LazyListState() }
 
     Column(Modifier.padding(32.dp)) {
@@ -46,11 +44,13 @@ fun TableScreen() {
             Table(
                 items = items,
                 modifier = Modifier.fillMaxSize(),
+                columns = columns,
                 scrollState = scrollState,
+                onColumnResized = onColumnResized,
                 header = {
-                    cell(size = 100.dp) { Text("Timestamp") }
-                    cell(size = 80.dp) { Text("Tag") }
-                    cell(weight = 1f) { Text("Message") }
+                    columns.forEach { key, c ->
+                        cell(columnKey = c.title) { Text(c.title) }
+                    }
                 }
             ) { i, item ->
                 val color = if (i == 2) {
@@ -58,11 +58,18 @@ fun TableScreen() {
                 } else {
                     MaterialTheme.colorScheme.surface
                 }
+                columns.forEach { key, c ->
+                    when (c.title) {
+                        "Timestamp" -> cell(
+                            background = color,
+                            columnKey = c.title
+                        ) { Text(item.timestamp.toString()) }
 
-                cell(size = 100.dp, background = color) { Text(item.timestamp.toString()) }
-                cell(size = 80.dp, background = color) { Text(item.tag) }
-                cell(weight = 1f, background = color) {
-                    Text(item.message)
+                        "Tag" -> cell(background = color, columnKey = c.title) { Text(item.tag) }
+                        "Message" -> cell(weight = 1f, background = color, columnKey = c.title) {
+                            Text(item.message)
+                        }
+                    }
                 }
             }
             VerticalScrollbar(
