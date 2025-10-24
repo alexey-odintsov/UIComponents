@@ -45,7 +45,6 @@ fun TableScreen() {
         Box {
             Table(
                 items = items,
-                columns = 3,
                 modifier = Modifier.fillMaxSize(),
                 scrollState = scrollState,
                 header = {

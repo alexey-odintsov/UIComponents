@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -65,7 +64,6 @@ class TableRowBuilder {
 @Composable
 fun <T> Table(
     items: List<T>,
-    columns: Int,
     modifier: Modifier = Modifier,
     scrollState: LazyListState,
     rowModifier: Modifier = Modifier,
@@ -93,13 +91,6 @@ fun <T> Table(
                 rowBuilder.cells.forEachIndexed { j, cellContent ->
                     cellContent()
                     if (j < rowBuilder.cells.lastIndex) VerticalDivider()
-                }
-
-                // Fill missing cells if fewer than columns
-                if (rowBuilder.cells.size < columns) {
-                    repeat(columns - rowBuilder.cells.size) {
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
                 }
             }
             HorizontalDivider()
