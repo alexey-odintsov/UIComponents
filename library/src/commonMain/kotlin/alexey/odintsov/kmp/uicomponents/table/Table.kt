@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -66,11 +67,15 @@ fun <T> Table(
     items: List<T>,
     columns: Int,
     modifier: Modifier = Modifier,
+    scrollState: LazyListState,
     rowModifier: Modifier = Modifier,
     header: @Composable TableRowBuilder.() -> Unit,
     content: @Composable TableRowBuilder.(index: Int, item: T) -> Unit
 ) {
-    LazyColumn(modifier = modifier.border(1.dp, DividerDefaults.color)) {
+    LazyColumn(
+        modifier = modifier.border(1.dp, DividerDefaults.color),
+        state = scrollState,
+    ) {
         stickyHeader {
             val rowBuilder = TableRowBuilder().apply { header() }
             Row(modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)) {
