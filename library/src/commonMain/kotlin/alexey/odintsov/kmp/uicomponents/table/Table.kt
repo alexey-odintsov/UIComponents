@@ -20,7 +20,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
@@ -44,7 +44,7 @@ data class CellContext(
 )
 
 @TableDsl
-class TableRowBuilder(val columns: SnapshotStateMap<String, ColumnInfo>) {
+class TableRowBuilder(val columns: SnapshotStateList<ColumnInfo>) {
     internal val cells = mutableListOf<CellContext>()
 
     fun cell(
@@ -55,7 +55,7 @@ class TableRowBuilder(val columns: SnapshotStateMap<String, ColumnInfo>) {
         content: @Composable () -> Unit
     ) {
         cells += CellContext(columnKey, {
-            val column = columns[columnKey]
+            val column = columns.firstOrNull { it.title == columnKey }
             Box(
                 modifier = modifier.fillMaxHeight()
                     .then(
@@ -86,7 +86,7 @@ fun <T> Table(
     scrollState: LazyListState,
     rowModifier: Modifier = Modifier,
     resizable: Boolean = true,
-    columns: SnapshotStateMap<String, ColumnInfo>,
+    columns: SnapshotStateList<ColumnInfo>,
     onColumnResized: (String, Float) -> Unit,
     header: @Composable TableRowBuilder.() -> Unit,
     content: @Composable TableRowBuilder.(index: Int, item: T) -> Unit,

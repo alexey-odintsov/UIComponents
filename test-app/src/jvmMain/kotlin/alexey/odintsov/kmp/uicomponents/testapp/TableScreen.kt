@@ -48,7 +48,7 @@ fun TableScreen() {
                 scrollState = scrollState,
                 onColumnResized = onColumnResized,
                 header = {
-                    columns.forEach { key, c ->
+                    columns.forEach { c ->
                         cell(columnKey = c.title) { Text(c.title) }
                     }
                 }
@@ -58,7 +58,7 @@ fun TableScreen() {
                 } else {
                     MaterialTheme.colorScheme.surface
                 }
-                columns.forEach { key, c ->
+                columns.forEach { c ->
                     when (c.title) {
                         "Timestamp" -> cell(
                             background = color,

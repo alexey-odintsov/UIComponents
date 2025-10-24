@@ -1,15 +1,15 @@
 package alexey.odintsov.kmp.uicomponents.testapp
 
 import alexey.odintsov.kmp.uicomponents.table.ColumnInfo
-import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import kotlin.math.max
 
 class TableScreenViewModel : ViewModel() {
-    val columns = mutableStateMapOf(
-        "Message" to ColumnInfo("Message", 0f, 1f, true),
-        "Tag" to ColumnInfo("Tag", 60f, null, true),
-        "Timestamp" to ColumnInfo("Timestamp", 100f, null, true),
+    val columns = mutableStateListOf(
+        ColumnInfo("Timestamp", 100f, null, true),
+        ColumnInfo("Tag", 60f, null, true),
+        ColumnInfo("Message", 0f, 1f, true),
     )
 
     val tags = listOf("System", "Monitoring", "App")
@@ -20,10 +20,11 @@ class TableScreenViewModel : ViewModel() {
     }
 
     fun onColumnResized(columnKey: String, delta: Float) {
-        val column = columns[columnKey]
+        val column = columns.firstOrNull { it.title == columnKey }
+        val index = columns.indexOf(column)
         if (column != null) {
             val newSize = max(column.size + delta, 20f)
-            columns[columnKey] = column.copy(size = newSize)
+            columns[index] = column.copy(size = newSize)
         }
     }
 
