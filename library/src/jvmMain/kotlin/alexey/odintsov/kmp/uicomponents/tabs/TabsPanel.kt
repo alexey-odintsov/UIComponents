@@ -1,5 +1,7 @@
-package alexey.odintsov.kmp.uicomponents.theme
+package alexey.odintsov.kmp.uicomponents.tabs
 
+import alexey.odintsov.kmp.uicomponents.theme.SystemTheme
+import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,7 +1,7 @@
 package alexey.odintsov.kmp.uicomponents.testapp
 
 import alexey.odintsov.kmp.uicomponents.StatusBar
-import alexey.odintsov.kmp.uicomponents.theme.TabsPanel
+import alexey.odintsov.kmp.uicomponents.tabs.TabsPanel
 import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +25,7 @@ fun App() {
     ThemeManager.AppTheme {
         var tabIndex by remember { mutableStateOf(0) }
         val tabs = remember {
-            listOf("Buttons", "Table", "Test").toMutableStateList()
+            listOf("Buttons", "Table", "Edit").toMutableStateList()
         }
 
         Column(
@@ -44,7 +44,7 @@ fun App() {
                 when (tabIndex) {
                     0 -> ButtonsScreen()
                     1 -> TableScreen()
-                    2 -> Text("Tab 3")
+                    2 -> EditScreen()
                 }
             }
             StatusBar(progress = 0.5f, statusText = "Loading")
