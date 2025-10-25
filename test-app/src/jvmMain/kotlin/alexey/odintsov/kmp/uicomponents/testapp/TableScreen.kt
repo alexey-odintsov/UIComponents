@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -49,7 +50,12 @@ fun TableScreen() {
                 onColumnResized = onColumnResized,
                 header = {
                     columns.forEach { c ->
-                        cell(columnKey = c.title) { Text(c.title) }
+                        cell(columnKey = c.title) {
+                            Text(
+                                modifier = Modifier.fillMaxSize(),
+                                text = c.title
+                            )
+                        }
                     }
                 }
             ) { i, item ->
@@ -63,10 +69,25 @@ fun TableScreen() {
                         "Timestamp" -> cell(
                             background = color,
                             columnKey = c.title
-                        ) { Text(item.timestamp.toString()) }
+                        ) {
+                            Text(
+                                modifier = Modifier.fillMaxSize(),
+                                text = item.timestamp.toString()
+                            )
+                        }
 
-                        "Tag" -> cell(background = color, columnKey = c.title) { Text(item.tag) }
-                        "Message" -> cell(weight = 1f, background = color, columnKey = c.title) {
+                        "Tag" -> cell(
+                            background = color,
+                            columnKey = c.title
+                        ) {
+                            Text(
+                                modifier = Modifier.fillMaxSize(),
+                                text = item.tag,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+
+                        "Message" -> cell(background = color, columnKey = c.title) {
                             Text(item.message)
                         }
                     }

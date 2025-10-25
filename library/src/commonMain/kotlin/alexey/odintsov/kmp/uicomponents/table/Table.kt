@@ -50,7 +50,6 @@ class TableRowBuilder(val columns: SnapshotStateList<ColumnInfo>) {
     fun cell(
         modifier: Modifier = Modifier,
         columnKey: String,
-        weight: Float? = null,
         background: Color? = null,
         content: @Composable () -> Unit
     ) {
@@ -101,14 +100,11 @@ fun <T> Table(
                 rowBuilder.cells.forEachIndexed { i, cellContent ->
                     cellContent.composable(this) // runs with the real RowScope
                     if (i < rowBuilder.cells.lastIndex) {
-                        if (resizable) {
-                            ColumnResizerDivider(
-                                key = cellContent.columnKey,
-                                onResized = onColumnResized,
-                            )
-                        } else {
-                            VerticalDivider()
-                        }
+                        ColumnResizerDivider(
+                            resizable = resizable,
+                            key = cellContent.columnKey,
+                            onResized = onColumnResized,
+                        )
                     }
                 }
             }
@@ -120,7 +116,12 @@ fun <T> Table(
             Row(modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)) {
                 rowBuilder.cells.forEachIndexed { j, cellContent ->
                     cellContent.composable(this)
-                    if (j < rowBuilder.cells.lastIndex) VerticalDivider()
+                    if (j < rowBuilder.cells.lastIndex) {
+                        ColumnResizerDivider(
+                            resizable = false,
+                            key = cellContent.columnKey,
+                        )
+                    }
                 }
             }
             HorizontalDivider()
@@ -131,17 +132,22 @@ fun <T> Table(
 @Composable
 fun ColumnResizerDivider(
     modifier: Modifier = Modifier,
+    resizable: Boolean,
     key: String,
     onResized: ((String, Float) -> Unit) = { _, _ -> }
 ) {
-    val finalModifier = modifier
-        .pointerHoverIcon(PointerIcon.Crosshair)
-        .pointerInput("divider-$key") {
-            detectDragGestures { change, dragAmount ->
-                change.consume()
-                onResized(key, dragAmount.x / 2f) // TODO: why is it 2x bigger?
+    val finalModifier = if (resizable) {
+        modifier
+            .pointerHoverIcon(PointerIcon.Crosshair)
+            .pointerInput("divider-$key") {
+                detectDragGestures { change, dragAmount ->
+                    change.consume()
+                    onResized(key, dragAmount.x / 2f) // TODO: why is it 2x bigger?
+                }
             }
-        }
+    } else {
+        modifier
+    }
 
     VerticalDivider(modifier = finalModifier)
 }
