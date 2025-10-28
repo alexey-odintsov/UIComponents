@@ -62,10 +62,13 @@ fun TableScreen() {
                     }
                 }
             ) { i, item ->
-                val color = if (i == 2) {
-                    Color.Yellow.copy(0.5f)
-                } else {
-                    MaterialTheme.colorScheme.surface
+                val color = when (i) {
+                    2 -> {
+                        Color.Yellow.copy(0.5f)
+                    }
+                    else -> {
+                        MaterialTheme.colorScheme.surface
+                    }
                 }
                 columns.forEach { c ->
                     when (c.title) {

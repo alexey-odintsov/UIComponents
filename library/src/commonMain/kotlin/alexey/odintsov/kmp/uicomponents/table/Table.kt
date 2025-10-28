@@ -42,14 +42,15 @@ data class ColumnInfo(
     val visible: Boolean,
 )
 
-data class CellContext(
+data class CellParams(
     val columnKey: String,
+    val background: Color? = null,
     val composable: @Composable RowScope.() -> Unit,
 )
 
 @TableDsl
 class TableRowBuilder(val columns: SnapshotStateList<ColumnInfo>) {
-    internal val cells = mutableListOf<CellContext>()
+    internal val cells = mutableListOf<CellParams>()
 
     fun cell(
         modifier: Modifier = Modifier,
@@ -57,28 +58,12 @@ class TableRowBuilder(val columns: SnapshotStateList<ColumnInfo>) {
         background: Color? = null,
         content: @Composable () -> Unit
     ) {
-        cells += CellContext(columnKey, {
-            val column = columns.firstOrNull { it.title == columnKey }
-            Box(
-                modifier = modifier.fillMaxHeight()
-                    .then(
-                        when {
-                            column == null -> Modifier.weight(1f)
-                            column.size > 0f -> Modifier.width(column.size.dp)
-                            column.weight != null -> Modifier.weight(column.weight)
-                            else -> Modifier.weight(1f)
-                        }
-                    )
-                    .then(
-                        if (background != null) Modifier.background(background) else Modifier.background(
-                            MaterialTheme.colorScheme.surface
-                        )
-                    )
-                    .padding(2.dp)
-            ) {
-                content()
-            }
-        })
+        cells += CellParams(
+            columnKey = columnKey,
+            background = background
+        ) {
+            content()
+        }
     }
 }
 
@@ -123,13 +108,19 @@ fun <T> Table(
         stickyHeader {
             val rowBuilder = TableRowBuilder(columns).apply { header() }
             Row(modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)) {
-                rowBuilder.cells.forEachIndexed { i, cellContent ->
-                    cellContent.composable(this) // runs with the real RowScope
+                rowBuilder.cells.forEachIndexed { i, cellParams ->
+                    CellWrapper(
+                        column = columns.firstOrNull { it.title == cellParams.columnKey }
+                            ?: ColumnInfo("", visible = false),
+                        background = cellParams.background
+                    ) {
+                        cellParams.composable(this)
+                    }
 
                     if (i < rowBuilder.cells.lastIndex) {
                         ColumnResizerDivider(
                             resizable = resizable,
-                            key = cellContent.columnKey,
+                            key = cellParams.columnKey,
                             onResized = onColumnResized,
                         )
                     }
@@ -152,17 +143,60 @@ fun <T> Table(
                         onClick = { onRowSelected(i) }
                     )
             ) {
-                rowBuilder.cells.forEachIndexed { j, cellContent ->
-                    cellContent.composable(this)
+                rowBuilder.cells.forEachIndexed { j, cellParams ->
+                    CellWrapper(
+                        column = columns.firstOrNull { it.title == cellParams.columnKey }
+                            ?: ColumnInfo("", visible = false),
+                        isSelected = i == selectedRow,
+                        background = cellParams.background
+                    ) {
+                        cellParams.composable(this)
+                    }
                     if (j < rowBuilder.cells.lastIndex) {
                         ColumnResizerDivider(
                             resizable = false,
-                            key = cellContent.columnKey,
+                            key = cellParams.columnKey,
                         )
                     }
                 }
             }
             HorizontalDivider()
         }
+    }
+}
+
+@Composable
+fun RowScope.CellWrapper(
+    modifier: Modifier = Modifier,
+    column: ColumnInfo,
+    background: Color?,
+    isSelected: Boolean = false,
+    composable: @Composable () -> Unit
+) {
+    Box(
+        modifier = modifier.fillMaxHeight()
+            .then(
+                when {
+                    column == null -> Modifier.weight(1f)
+                    column.size > 0f -> Modifier.width(column.size.dp)
+                    column.weight != null -> Modifier.weight(column.weight)
+                    else -> Modifier.weight(1f)
+                }
+            )
+            .then(
+                when {
+                    isSelected -> Modifier.background(Color.Gray)
+                    background != null -> Modifier.background(
+                        background
+                    )
+
+                    else -> Modifier.background(
+                        MaterialTheme.colorScheme.surface
+                    )
+                }
+            )
+            .padding(2.dp)
+    ) {
+        composable()
     }
 }
