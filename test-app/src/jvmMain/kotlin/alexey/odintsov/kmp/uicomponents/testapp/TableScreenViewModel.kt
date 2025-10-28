@@ -2,6 +2,7 @@ package alexey.odintsov.kmp.uicomponents.testapp
 
 import alexey.odintsov.kmp.uicomponents.table.ColumnInfo
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import kotlin.math.max
 
@@ -12,11 +13,25 @@ class TableScreenViewModel : ViewModel() {
         ColumnInfo("Message", 0f, 1f, true),
     )
 
+    val selectedRows = mutableStateListOf<Int>()
+    val focusedRow = mutableStateOf<Int?>(null)
+
     val tags = listOf("System", "Monitoring", "App")
     val items = (1..100).map {
         val tag = tags.random()
         val message = ('A'..'z').map { it }.shuffled().subList(0, 40).joinToString("")
         LogItem(System.currentTimeMillis(), tag, message)
+    }
+
+    fun onRowMultipleSelection(i: Int) {
+        if (!selectedRows.contains(i)) {
+            selectedRows.add(i)
+        }
+    }
+
+    fun onRowSelected(i: Int) {
+        selectedRows.clear()
+        selectedRows.add(i)
     }
 
     fun onColumnResized(columnKey: String, delta: Float) {
