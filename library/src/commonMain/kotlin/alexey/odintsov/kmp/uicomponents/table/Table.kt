@@ -49,7 +49,7 @@ data class CellParams(
 )
 
 @TableDsl
-class TableRowBuilder(val columns: SnapshotStateList<ColumnInfo>) {
+class TableRowBuilder() {
     internal val cells = mutableListOf<CellParams>()
 
     fun cell(
@@ -106,7 +106,7 @@ fun <T> Table(
         state = scrollState,
     ) {
         stickyHeader {
-            val rowBuilder = TableRowBuilder(columns).apply { header() }
+            val rowBuilder = TableRowBuilder().apply { header() }
             Row(modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)) {
                 rowBuilder.cells.forEachIndexed { i, cellParams ->
                     CellWrapper(
@@ -129,7 +129,7 @@ fun <T> Table(
             HorizontalDivider()
         }
         itemsIndexed(items) { i, item ->
-            val rowBuilder = TableRowBuilder(columns).apply { content(i, item) }
+            val rowBuilder = TableRowBuilder().apply { content(i, item) }
 
             Row(
                 modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)
@@ -177,7 +177,6 @@ fun RowScope.CellWrapper(
         modifier = modifier.fillMaxHeight()
             .then(
                 when {
-                    column == null -> Modifier.weight(1f)
                     column.size > 0f -> Modifier.width(column.size.dp)
                     column.weight != null -> Modifier.weight(column.weight)
                     else -> Modifier.weight(1f)
