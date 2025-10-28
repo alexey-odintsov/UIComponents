@@ -13,8 +13,7 @@ class TableScreenViewModel : ViewModel() {
         ColumnInfo("Message", 0f, 1f, true),
     )
 
-    val selectedRows = mutableStateListOf<Int>()
-    val focusedRow = mutableStateOf<Int?>(null)
+    val selectedRow = mutableStateOf<Int>(0)
 
     val tags = listOf("System", "Monitoring", "App")
     val items = (1..100).map {
@@ -23,15 +22,8 @@ class TableScreenViewModel : ViewModel() {
         LogItem(System.currentTimeMillis(), tag, message)
     }
 
-    fun onRowMultipleSelection(i: Int) {
-        if (!selectedRows.contains(i)) {
-            selectedRows.add(i)
-        }
-    }
-
     fun onRowSelected(i: Int) {
-        selectedRows.clear()
-        selectedRows.add(i)
+        selectedRow.value = i
     }
 
     fun onColumnResized(columnKey: String, delta: Float) {

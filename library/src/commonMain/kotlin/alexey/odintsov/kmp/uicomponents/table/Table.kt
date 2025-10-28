@@ -14,13 +14,22 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 
 @DslMarker
@@ -80,13 +89,35 @@ fun <T> Table(
     scrollState: LazyListState,
     rowModifier: Modifier = Modifier,
     resizable: Boolean = true,
+    selectedRow: Int,
+    onRowSelected: (Int) -> Unit,
     columns: SnapshotStateList<ColumnInfo>,
     onColumnResized: (String, Float) -> Unit,
     header: @Composable TableRowBuilder.() -> Unit,
     content: @Composable TableRowBuilder.(index: Int, item: T) -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
+
     LazyColumn(
-        modifier = modifier.border(1.dp, DividerDefaults.color),
+        modifier = modifier.border(1.dp, DividerDefaults.color)
+            .onKeyEvent(onKeyEvent = { e ->
+                if (e.type == KeyEventType.KeyDown) {
+                    return@onKeyEvent when (e.key) {
+                        Key.S, Key.DirectionDown -> {
+                            focusManager.moveFocus(FocusDirection.Down)
+                            true
+                        }
+
+                        Key.W, Key.DirectionUp -> {
+                            focusManager.moveFocus(FocusDirection.Up)
+                            true
+                        }
+
+                        else -> false
+                    }
+                }
+                false
+            }),
         state = scrollState,
     ) {
         stickyHeader {
@@ -94,6 +125,7 @@ fun <T> Table(
             Row(modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)) {
                 rowBuilder.cells.forEachIndexed { i, cellContent ->
                     cellContent.composable(this) // runs with the real RowScope
+
                     if (i < rowBuilder.cells.lastIndex) {
                         ColumnResizerDivider(
                             resizable = resizable,
@@ -108,7 +140,18 @@ fun <T> Table(
         itemsIndexed(items) { i, item ->
             val rowBuilder = TableRowBuilder(columns).apply { content(i, item) }
 
-            Row(modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)) {
+            Row(
+                modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)
+                    .onFocusChanged { state ->
+                        if (state.isFocused) {
+                            onRowSelected(i)
+                        }
+                    }
+                    .selectable(
+                        selected = i == selectedRow,
+                        onClick = { onRowSelected(i) }
+                    )
+            ) {
                 rowBuilder.cells.forEachIndexed { j, cellContent ->
                     cellContent.composable(this)
                     if (j < rowBuilder.cells.lastIndex) {
