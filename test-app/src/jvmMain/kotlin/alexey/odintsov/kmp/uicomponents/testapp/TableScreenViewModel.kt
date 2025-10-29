@@ -13,17 +13,17 @@ class TableScreenViewModel : ViewModel() {
         ColumnInfo("Message", 0f, 1f, true),
     )
 
-    val selectedRow = mutableStateOf<Int>(0)
+    val selectedRow = mutableStateOf<String?>(null)
 
     val tags = listOf("System", "Monitoring", "App")
     val items = (1..100).map {
         val tag = tags.random()
         val message = ('A'..'z').map { it }.shuffled().subList(0, 40).joinToString("")
-        LogItem(System.currentTimeMillis(), tag, message)
+        LogItem(message, System.currentTimeMillis(), tag, message)
     }
 
-    fun onRowSelected(i: Int) {
-        selectedRow.value = i
+    fun onRowSelected(key: String?) {
+        selectedRow.value = key
     }
 
     fun onColumnResized(columnKey: String, delta: Float) {

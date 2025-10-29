@@ -42,21 +42,21 @@ data class ColumnInfo(
     val visible: Boolean,
 )
 
-data class CellParams(
+data class CellParams<K>(
     val columnKey: String,
-    val rowKey: Int,
+    val rowKey: K?,
     val background: Color? = null,
     val composable: @Composable RowScope.() -> Unit,
 )
 
 @TableDsl
-class TableRowBuilder() {
-    internal val cells = mutableListOf<CellParams>()
+class TableRowBuilder<K>() {
+    internal val cells = mutableListOf<CellParams<K>>()
 
     fun cell(
         modifier: Modifier = Modifier,
         columnKey: String,
-        rowKey: Int,
+        rowKey: K?,
         background: Color? = null,
         content: @Composable () -> Unit
     ) {
@@ -71,18 +71,18 @@ class TableRowBuilder() {
 }
 
 @Composable
-fun <T> Table(
+fun <T, K> Table(
     items: List<T>,
     modifier: Modifier = Modifier,
     scrollState: LazyListState,
     rowModifier: Modifier = Modifier,
     resizable: Boolean = true,
-    selectedRow: Int,
-    onRowSelected: (Int) -> Unit,
+    selectedRow: K?,
+    onRowSelected: (K) -> Unit,
     columns: SnapshotStateList<ColumnInfo>,
     onColumnResized: (String, Float) -> Unit,
-    header: @Composable TableRowBuilder.() -> Unit,
-    content: @Composable TableRowBuilder.(index: Int, item: T) -> Unit,
+    header: @Composable TableRowBuilder<K>.() -> Unit,
+    content: @Composable TableRowBuilder<K>.(index: Int, item: T) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -109,7 +109,7 @@ fun <T> Table(
         state = scrollState,
     ) {
         stickyHeader {
-            val rowBuilder = TableRowBuilder().apply { header() }
+            val rowBuilder = TableRowBuilder<K>().apply { header() }
             Row(modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)) {
                 rowBuilder.cells.forEachIndexed { i, cellParams ->
                     CellWrapper(
@@ -132,18 +132,28 @@ fun <T> Table(
             HorizontalDivider()
         }
         itemsIndexed(items) { i, item ->
-            val rowBuilder = TableRowBuilder().apply { content(i, item) }
+            val rowBuilder = TableRowBuilder<K>().apply { content(i, item) }
 
             Row(
                 modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)
                     .onFocusChanged { state ->
                         if (state.isFocused) {
-                            onRowSelected(i)
+                            rowBuilder.cells.firstOrNull()?.let {
+                                if (it.rowKey != null) {
+                                    onRowSelected(it.rowKey)
+                                }
+                            }
                         }
                     }
                     .selectable(
                         selected = false,
-                        onClick = { onRowSelected(i) }
+                        onClick = {
+                            rowBuilder.cells.firstOrNull()?.let {
+                                if (it.rowKey != null) {
+                                    onRowSelected(it.rowKey)
+                                }
+                            }
+                        }
                     )
             ) {
                 rowBuilder.cells.forEachIndexed { j, cellParams ->

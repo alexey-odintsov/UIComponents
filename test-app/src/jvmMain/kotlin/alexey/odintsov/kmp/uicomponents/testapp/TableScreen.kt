@@ -26,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 data class LogItem(
+    val key: String,
     val timestamp: Long,
     val tag: String,
     val message: String,
@@ -43,7 +44,7 @@ fun TableScreen() {
 
     Column(Modifier.padding(32.dp)) {
         Box {
-            Table(
+            Table<LogItem, String>(
                 items = items,
                 modifier = Modifier.fillMaxSize(),
                 columns = columns,
@@ -53,7 +54,7 @@ fun TableScreen() {
                 onRowSelected = viewModel::onRowSelected,
                 header = {
                     columns.forEach { c ->
-                        cell(columnKey = c.title, rowKey = -999) {
+                        cell(columnKey = c.title, rowKey = null) {
                             Text(
                                 modifier = Modifier.fillMaxSize(),
                                 text = c.title
@@ -75,7 +76,7 @@ fun TableScreen() {
                         "Timestamp" -> cell(
                             background = color,
                             columnKey = c.title,
-                            rowKey = i,
+                            rowKey = item.key,
                         ) {
                             Text(modifier = Modifier.border(1.dp, Color.Gray), text = item.timestamp.toString())
                         }
@@ -83,7 +84,7 @@ fun TableScreen() {
                         "Tag" -> cell(
                             background = color,
                             columnKey = c.title,
-                            rowKey = i,
+                            rowKey = item.key,
                         ) {
                             Text(
                                 text = item.tag,
@@ -94,7 +95,7 @@ fun TableScreen() {
                         "Message" -> cell(
                             background = color,
                             columnKey = c.title,
-                            rowKey = i,
+                            rowKey = item.key,
                         ) {
                             Text(item.message)
                         }
