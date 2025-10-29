@@ -44,6 +44,7 @@ data class ColumnInfo(
 
 data class CellParams(
     val columnKey: String,
+    val rowKey: Int,
     val background: Color? = null,
     val composable: @Composable RowScope.() -> Unit,
 )
@@ -55,11 +56,13 @@ class TableRowBuilder() {
     fun cell(
         modifier: Modifier = Modifier,
         columnKey: String,
+        rowKey: Int,
         background: Color? = null,
         content: @Composable () -> Unit
     ) {
         cells += CellParams(
             columnKey = columnKey,
+            rowKey = rowKey,
             background = background
         ) {
             content()
@@ -139,7 +142,7 @@ fun <T> Table(
                         }
                     }
                     .selectable(
-                        selected = i == selectedRow,
+                        selected = false,
                         onClick = { onRowSelected(i) }
                     )
             ) {
@@ -147,7 +150,7 @@ fun <T> Table(
                     CellWrapper(
                         column = columns.firstOrNull { it.title == cellParams.columnKey }
                             ?: ColumnInfo("", visible = false),
-                        isSelected = i == selectedRow,
+                        isSelected = cellParams.rowKey == selectedRow,
                         background = cellParams.background
                     ) {
                         cellParams.composable(this)

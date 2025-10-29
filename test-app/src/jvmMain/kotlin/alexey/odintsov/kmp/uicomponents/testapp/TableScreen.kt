@@ -53,7 +53,7 @@ fun TableScreen() {
                 onRowSelected = viewModel::onRowSelected,
                 header = {
                     columns.forEach { c ->
-                        cell(columnKey = c.title) {
+                        cell(columnKey = c.title, rowKey = -999) {
                             Text(
                                 modifier = Modifier.fillMaxSize(),
                                 text = c.title
@@ -74,14 +74,16 @@ fun TableScreen() {
                     when (c.title) {
                         "Timestamp" -> cell(
                             background = color,
-                            columnKey = c.title
+                            columnKey = c.title,
+                            rowKey = i,
                         ) {
                             Text(modifier = Modifier.border(1.dp, Color.Gray), text = item.timestamp.toString())
                         }
 
                         "Tag" -> cell(
                             background = color,
-                            columnKey = c.title
+                            columnKey = c.title,
+                            rowKey = i,
                         ) {
                             Text(
                                 text = item.tag,
@@ -89,7 +91,11 @@ fun TableScreen() {
                             )
                         }
 
-                        "Message" -> cell(background = color, columnKey = c.title) {
+                        "Message" -> cell(
+                            background = color,
+                            columnKey = c.title,
+                            rowKey = i,
+                        ) {
                             Text(item.message)
                         }
                     }
