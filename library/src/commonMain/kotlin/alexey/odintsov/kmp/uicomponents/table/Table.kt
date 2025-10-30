@@ -112,7 +112,10 @@ fun <T, K> Table(
         stickyHeader {
             val rowBuilder = TableRowBuilder<K>().apply { header() }
             Row(modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)) {
-                rowBuilder.cells.sortedBy{ it.columnInfo.order }.forEachIndexed { i, cellParams ->
+                rowBuilder.cells
+                    .filter { it.columnInfo.visible }
+                    .sortedBy { it.columnInfo.order }
+                    .forEachIndexed { i, cellParams ->
                     CellWrapper(
                         column = columns.firstOrNull { it.title == cellParams.columnInfo.title }
                             ?: ColumnInfo("", visible = false, order = 0),
@@ -157,7 +160,10 @@ fun <T, K> Table(
                         }
                     )
             ) {
-                rowBuilder.cells.sortedBy{ it.columnInfo.order }.forEachIndexed { j, cellParams ->
+                rowBuilder.cells
+                    .filter { it.columnInfo.visible }
+                    .sortedBy { it.columnInfo.order }
+                    .forEachIndexed { j, cellParams ->
                     CellWrapper(
                         column = columns.firstOrNull { it.title == cellParams.columnInfo.title }
                             ?: ColumnInfo("", visible = false, order = 0),
