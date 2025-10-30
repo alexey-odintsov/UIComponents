@@ -40,10 +40,11 @@ data class ColumnInfo(
     val size: Float = 0f,
     val weight: Float? = 1f,
     val visible: Boolean,
+    val order: Byte,
 )
 
 data class CellParams<K>(
-    val columnKey: String,
+    val columnInfo: ColumnInfo,
     val rowKey: K?,
     val background: Color? = null,
     val composable: @Composable RowScope.() -> Unit,
@@ -55,13 +56,13 @@ class TableRowBuilder<K>() {
 
     fun cell(
         modifier: Modifier = Modifier,
-        columnKey: String,
+        columnInfo: ColumnInfo,
         rowKey: K?,
         background: Color? = null,
         content: @Composable () -> Unit
     ) {
         cells += CellParams(
-            columnKey = columnKey,
+            columnInfo = columnInfo,
             rowKey = rowKey,
             background = background
         ) {
@@ -111,10 +112,10 @@ fun <T, K> Table(
         stickyHeader {
             val rowBuilder = TableRowBuilder<K>().apply { header() }
             Row(modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)) {
-                rowBuilder.cells.forEachIndexed { i, cellParams ->
+                rowBuilder.cells.sortedBy{ it.columnInfo.order }.forEachIndexed { i, cellParams ->
                     CellWrapper(
-                        column = columns.firstOrNull { it.title == cellParams.columnKey }
-                            ?: ColumnInfo("", visible = false),
+                        column = columns.firstOrNull { it.title == cellParams.columnInfo.title }
+                            ?: ColumnInfo("", visible = false, order = 0),
                         background = cellParams.background
                     ) {
                         cellParams.composable(this)
@@ -123,7 +124,7 @@ fun <T, K> Table(
                     if (i < rowBuilder.cells.lastIndex) {
                         ColumnResizerDivider(
                             resizable = resizable,
-                            key = cellParams.columnKey,
+                            key = cellParams.columnInfo.title,
                             onResized = onColumnResized,
                         )
                     }
@@ -156,10 +157,10 @@ fun <T, K> Table(
                         }
                     )
             ) {
-                rowBuilder.cells.forEachIndexed { j, cellParams ->
+                rowBuilder.cells.sortedBy{ it.columnInfo.order }.forEachIndexed { j, cellParams ->
                     CellWrapper(
-                        column = columns.firstOrNull { it.title == cellParams.columnKey }
-                            ?: ColumnInfo("", visible = false),
+                        column = columns.firstOrNull { it.title == cellParams.columnInfo.title }
+                            ?: ColumnInfo("", visible = false, order = 0),
                         isSelected = cellParams.rowKey == selectedRow,
                         background = cellParams.background
                     ) {
@@ -168,7 +169,7 @@ fun <T, K> Table(
                     if (j < rowBuilder.cells.lastIndex) {
                         ColumnResizerDivider(
                             resizable = false,
-                            key = cellParams.columnKey,
+                            key = cellParams.columnInfo.title,
                         )
                     }
                 }

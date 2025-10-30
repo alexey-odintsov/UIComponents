@@ -8,9 +8,9 @@ import kotlin.math.max
 
 class TableScreenViewModel : ViewModel() {
     val columns = mutableStateListOf(
-        ColumnInfo("Timestamp", 100f, null, true),
-        ColumnInfo("Tag", 60f, null, true),
-        ColumnInfo("Message", 0f, 1f, true),
+        ColumnInfo("Timestamp", 100f, null, true, 0),
+        ColumnInfo("Tag", 60f, null, true, 1),
+        ColumnInfo("Message", 0f, 1f, true, 2),
     )
 
     val selectedRow = mutableStateOf<String?>(null)
