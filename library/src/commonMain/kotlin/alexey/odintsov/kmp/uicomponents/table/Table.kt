@@ -35,12 +35,18 @@ import androidx.compose.ui.unit.dp
 @DslMarker
 annotation class TableDsl
 
+enum class ColumnAlign {
+    Left, Center, Right,
+}
+
 data class ColumnInfo(
     val title: String,
     val size: Float = 0f,
     val weight: Float? = 1f,
     val visible: Boolean,
-    val order: Byte,
+    val order: Int,
+    val align: ColumnAlign = ColumnAlign.Left,
+    val metaInfo: HashMap<String, String> = hashMapOf()
 )
 
 data class CellParams<K>(

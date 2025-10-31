@@ -1,5 +1,7 @@
 package alexey.odintsov.kmp.uicomponents.testapp
 
+import alexey.odintsov.kmp.uicomponents.table.ColumnAlign
+import alexey.odintsov.kmp.uicomponents.table.ColumnInfo
 import alexey.odintsov.kmp.uicomponents.table.Table
 import alexey.odintsov.kmp.uicomponents.theme.SystemTheme
 import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -27,9 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 data class LogItem(
     val key: String,
-    val timestamp: Long,
-    val tag: String,
-    val message: String,
+    val data: Map<String, String>,
 )
 
 @Composable
@@ -57,7 +58,8 @@ fun TableScreen() {
                         cell(columnInfo = c, rowKey = null) {
                             Text(
                                 modifier = Modifier.fillMaxSize(),
-                                text = c.title
+                                text = c.title,
+                                textAlign = mapAlign(c),
                             )
                         }
                     }
@@ -72,34 +74,18 @@ fun TableScreen() {
                     }
                 }
                 columns.forEach { c ->
-                    when (c.title) {
-                        "Timestamp" -> cell(
-                            background = color,
-                            columnInfo = c,
-                            rowKey = item.key,
-                        ) {
-                            Text(modifier = Modifier.border(1.dp, Color.Gray), text = item.timestamp.toString())
-                        }
-
-                        "Tag" -> cell(
-                            background = color,
-                            columnInfo = c,
-                            rowKey = item.key,
-                        ) {
-                            Text(
-                                text = item.tag,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-
-                        "Message" -> cell(
-                            background = color,
-                            columnInfo = c,
-                            rowKey = item.key,
-                        ) {
-                            Text(item.message)
-                        }
+                    cell(
+                        background = color,
+                        columnInfo = c,
+                        rowKey = item.key,
+                    ) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth().border(1.dp, Color.Gray),
+                            text = item.data[c.title].toString(),
+                            textAlign = mapAlign(c)
+                        )
                     }
+
                 }
             }
             VerticalScrollbar(
@@ -110,6 +96,12 @@ fun TableScreen() {
             )
         }
     }
+}
+
+private fun mapAlign(c: ColumnInfo): TextAlign = when (c.align) {
+    ColumnAlign.Left -> TextAlign.Left
+    ColumnAlign.Center -> TextAlign.Center
+    ColumnAlign.Right -> TextAlign.Right
 }
 
 @Preview
