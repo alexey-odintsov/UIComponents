@@ -7,7 +7,6 @@ import alexey.odintsov.kmp.uicomponents.theme.SystemTheme
 import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -51,11 +50,11 @@ fun TableScreen() {
                 columns = columns,
                 scrollState = scrollState,
                 onColumnResized = onColumnResized,
-                selectedRow = viewModel.selectedRow.value,
+                selectedRow = viewModel.selectedRowIndex.value,
                 onRowSelected = viewModel::onRowSelected,
                 header = {
                     columns.forEach { c ->
-                        cell(columnInfo = c, rowKey = null) {
+                        cell(columnInfo = c) {
                             Text(
                                 modifier = Modifier.fillMaxSize(),
                                 text = c.title,
@@ -77,10 +76,9 @@ fun TableScreen() {
                     cell(
                         background = color,
                         columnInfo = c,
-                        rowKey = item.key,
                     ) {
                         Text(
-                            modifier = Modifier.fillMaxWidth().border(1.dp, Color.Gray),
+                            modifier = Modifier.fillMaxWidth(),//.border(1.dp, Color.Gray),
                             text = item.data[c.title].toString(),
                             textAlign = mapAlign(c)
                         )

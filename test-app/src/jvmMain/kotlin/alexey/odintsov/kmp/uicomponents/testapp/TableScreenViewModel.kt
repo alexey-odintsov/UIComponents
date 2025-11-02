@@ -37,7 +37,7 @@ class TableScreenViewModel : ViewModel() {
         ),
     )
 
-    val selectedRow = mutableStateOf<String?>(null)
+    val selectedRowIndex = mutableStateOf<Int?>(null)
 
     val tags = listOf("System", "Monitoring", "App")
     val levels = listOf("V", "D", "W", "E", "F")
@@ -52,8 +52,8 @@ class TableScreenViewModel : ViewModel() {
         LogItem(message, values)
     }
 
-    fun onRowSelected(key: String?) {
-        selectedRow.value = key
+    fun onRowSelected(index: Int) {
+        selectedRowIndex.value = index
     }
 
     fun onColumnResized(columnKey: String, delta: Float) {
