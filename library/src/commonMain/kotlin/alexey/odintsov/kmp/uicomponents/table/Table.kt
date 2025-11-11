@@ -91,25 +91,7 @@ fun <T> Table(
     val focusManager = LocalFocusManager.current
 
     LazyColumn(
-        modifier = modifier.border(1.dp, DividerDefaults.color)
-            .onKeyEvent(onKeyEvent = { e ->
-                if (e.type == KeyEventType.KeyDown) {
-                    return@onKeyEvent when (e.key) {
-                        Key.S, Key.DirectionDown -> {
-                            focusManager.moveFocus(FocusDirection.Down)
-                            true
-                        }
-
-                        Key.W, Key.DirectionUp -> {
-                            focusManager.moveFocus(FocusDirection.Up)
-                            true
-                        }
-
-                        else -> false
-                    }
-                }
-                false
-            }),
+        modifier = modifier.border(1.dp, DividerDefaults.color),
         state = scrollState,
     ) {
         stickyHeader {
@@ -144,6 +126,28 @@ fun <T> Table(
             rowWrapper(i, item) {
                 Row(
                     modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)
+                        .onKeyEvent(onKeyEvent = { e ->
+                            if (e.type == KeyEventType.KeyDown) {
+                                return@onKeyEvent when (e.key) {
+                                    Key.S, Key.DirectionDown -> {
+                                        if (i < items.lastIndex) {
+                                            focusManager.moveFocus(FocusDirection.Down)
+                                        }
+                                        true
+                                    }
+
+                                    Key.W, Key.DirectionUp -> {
+                                        if (i > 0) {
+                                            focusManager.moveFocus(FocusDirection.Up)
+                                        }
+                                        true
+                                    }
+
+                                    else -> false
+                                }
+                            }
+                            false
+                        })
                         .onFocusChanged { state ->
                             if (state.isFocused) {
                                 rowBuilder.cells.firstOrNull()?.let {
