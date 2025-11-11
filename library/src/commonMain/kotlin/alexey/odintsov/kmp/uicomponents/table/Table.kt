@@ -60,7 +60,6 @@ class TableRowBuilder() {
     internal val cells = mutableListOf<CellParams>()
 
     fun cell(
-        modifier: Modifier = Modifier,
         columnInfo: ColumnInfo,
         background: Color? = null,
         content: @Composable () -> Unit
@@ -75,7 +74,7 @@ class TableRowBuilder() {
 }
 
 @Composable
-fun <T, K> Table(
+fun <T> Table(
     items: List<T>,
     modifier: Modifier = Modifier,
     scrollState: LazyListState,
@@ -86,6 +85,7 @@ fun <T, K> Table(
     columns: SnapshotStateList<ColumnInfo>,
     onColumnResized: (String, Float) -> Unit,
     header: @Composable TableRowBuilder.() -> Unit,
+    rowWrapper: @Composable (index: Int, item: T, content: @Composable () -> Unit) -> Unit,
     content: @Composable TableRowBuilder.(index: Int, item: T) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -141,42 +141,44 @@ fun <T, K> Table(
         itemsIndexed(items) { i, item ->
             val rowBuilder = TableRowBuilder().apply { content(i, item) }
 
-            Row(
-                modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)
-                    .onFocusChanged { state ->
-                        if (state.isFocused) {
-                            rowBuilder.cells.firstOrNull()?.let {
-                                onRowSelected(i)
+            rowWrapper(i, item) {
+                Row(
+                    modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)
+                        .onFocusChanged { state ->
+                            if (state.isFocused) {
+                                rowBuilder.cells.firstOrNull()?.let {
+                                    onRowSelected(i)
+                                }
                             }
                         }
-                    }
-                    .selectable(
-                        selected = false,
-                        onClick = {
-                            rowBuilder.cells.firstOrNull()?.let {
-                                onRowSelected(i)
+                        .selectable(
+                            selected = false,
+                            onClick = {
+                                rowBuilder.cells.firstOrNull()?.let {
+                                    onRowSelected(i)
+                                }
                             }
-                        }
-                    )
-            ) {
-                rowBuilder.cells
-                    .filter { it.columnInfo.visible }
-                    .sortedBy { it.columnInfo.order }
-                    .forEachIndexed { j, cellParams ->
-                    CellWrapper(
-                        column = columns.firstOrNull { it.title == cellParams.columnInfo.title }
-                            ?: ColumnInfo("", visible = false, order = 0),
-                        isSelected = i == selectedRow,
-                        background = cellParams.background
-                    ) {
-                        cellParams.composable(this)
-                    }
-                    if (j < rowBuilder.cells.lastIndex) {
-                        ColumnResizerDivider(
-                            resizable = false,
-                            key = cellParams.columnInfo.title,
                         )
-                    }
+                ) {
+                    rowBuilder.cells
+                        .filter { it.columnInfo.visible }
+                        .sortedBy { it.columnInfo.order }
+                        .forEachIndexed { j, cellParams ->
+                            CellWrapper(
+                                column = columns.firstOrNull { it.title == cellParams.columnInfo.title }
+                                    ?: ColumnInfo("", visible = false, order = 0),
+                                isSelected = i == selectedRow,
+                                background = cellParams.background
+                            ) {
+                                cellParams.composable(this)
+                            }
+                            if (j < rowBuilder.cells.lastIndex) {
+                                ColumnResizerDivider(
+                                    resizable = false,
+                                    key = cellParams.columnInfo.title,
+                                )
+                            }
+                        }
                 }
             }
             HorizontalDivider()
