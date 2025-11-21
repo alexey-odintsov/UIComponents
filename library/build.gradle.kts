@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "alexey.odintsov.kmp"
-version = "0.0.19"
+version = "0.0.20"
 
 kotlin {
     jvm()
