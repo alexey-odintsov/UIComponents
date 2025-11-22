@@ -4,6 +4,7 @@ import alexey.odintsov.kmp.uicomponents.buttons.CustomButton
 import alexey.odintsov.kmp.uicomponents.buttons.CustomDropDownButton
 import alexey.odintsov.kmp.uicomponents.buttons.DropDownItem
 import alexey.odintsov.kmp.uicomponents.buttons.ToggleImageButton
+import alexey.odintsov.kmp.uicomponents.checkbox.CustomCheckbox
 import alexey.odintsov.kmp.uicomponents.resources.Res
 import alexey.odintsov.kmp.uicomponents.resources.icon_copy
 import androidx.compose.foundation.layout.Arrangement
@@ -49,5 +50,7 @@ fun ButtonsScreen() {
             icon = Res.drawable.icon_copy,
             checkedState = checked,
             updateCheckedState = { c -> checked = c })
+
+        CustomCheckbox(checked = checked, onCheckedChange = { c -> checked = c })
     }
 }
