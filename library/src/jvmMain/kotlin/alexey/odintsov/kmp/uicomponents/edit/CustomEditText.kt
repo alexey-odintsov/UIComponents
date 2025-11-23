@@ -1,7 +1,6 @@
 package alexey.odintsov.kmp.uicomponents.edit
 
-import alexey.odintsov.kmp.uicomponents.theme.SystemTheme
-import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
+import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,8 +20,8 @@ import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -154,8 +153,8 @@ fun CustomEditText(
 
 @Preview
 @Composable
-fun PreviewDesktopEditText() {
-    ThemeManager.CustomTheme(SystemTheme(true)) {
+private fun PreviewDesktopEditText() {
+    PreviewDarkAndLightTheme(true) {
         Column(modifier = Modifier.padding(10.dp)) {
             CustomEditText("Hello", {})
             for (i in 6..15) {

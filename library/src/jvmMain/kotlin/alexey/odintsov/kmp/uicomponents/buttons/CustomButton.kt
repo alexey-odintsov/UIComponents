@@ -1,7 +1,6 @@
 package alexey.odintsov.kmp.uicomponents.buttons
 
-import alexey.odintsov.kmp.uicomponents.theme.SystemTheme
-import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
+import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -90,58 +89,48 @@ fun CustomButton(
 
 @Preview
 @Composable
-fun PreviewCustomButton() {
-    Row {
-        ThemeManager.CustomTheme(SystemTheme(true)) {
-            PreviewButtonWithParameters()
-        }
-        ThemeManager.CustomTheme(SystemTheme(false)) {
-            PreviewButtonWithParameters()
-        }
-    }
-}
-
-@Composable
-fun PreviewButtonWithParameters() {
-    Column(Modifier.padding(4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Row(Modifier.padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            CustomButton(onClick = {}) {
-                Text("Custom Button")
+private fun PreviewCustomButton() {
+    PreviewDarkAndLightTheme(true) {
+        Column(Modifier.padding(4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(Modifier.padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                CustomButton(onClick = {}) {
+                    Text("Custom Button")
+                }
+                CustomButton(enabled = false, onClick = {}) {
+                    Text("Disabled")
+                }
             }
-            CustomButton(enabled = false, onClick = {}) {
-                Text("Disabled")
+            Row(Modifier.padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Button(onClick = {}) {
+                    Text("Button")
+                }
+                Button(enabled = false, onClick = {}) {
+                    Text("Button")
+                }
             }
-        }
-        Row(Modifier.padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            Button(onClick = {}) {
-                Text("Button")
+            Row(Modifier.padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                FilledTonalButton(onClick = {}) {
+                    Text("FilledTonalButton")
+                }
+                FilledTonalButton(enabled = false, onClick = {}) {
+                    Text("Disabled")
+                }
             }
-            Button(enabled = false, onClick = {}) {
-                Text("Button")
+            Row(Modifier.padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                OutlinedButton(onClick = { }) {
+                    Text("Outlined")
+                }
+                OutlinedButton(enabled = false, onClick = { }) {
+                    Text("Outlined")
+                }
             }
-        }
-        Row(Modifier.padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            FilledTonalButton(onClick = {}) {
-                Text("FilledTonalButton")
-            }
-            FilledTonalButton(enabled = false, onClick = {}) {
-                Text("Disabled")
-            }
-        }
-        Row(Modifier.padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            OutlinedButton(onClick = { }) {
-                Text("Outlined")
-            }
-            OutlinedButton(enabled = false, onClick = { }) {
-                Text("Outlined")
-            }
-        }
-        Row(Modifier.padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            ElevatedButton(onClick = { }) {
-                Text("Elevated")
-            }
-            ElevatedButton(enabled = false, onClick = { }) {
-                Text("Elevated")
+            Row(Modifier.padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                ElevatedButton(onClick = { }) {
+                    Text("Elevated")
+                }
+                ElevatedButton(enabled = false, onClick = { }) {
+                    Text("Elevated")
+                }
             }
         }
     }

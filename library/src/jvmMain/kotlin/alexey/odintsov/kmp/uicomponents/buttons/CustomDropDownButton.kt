@@ -1,13 +1,11 @@
 package alexey.odintsov.kmp.uicomponents.buttons
 
+import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
 import alexey.odintsov.kmp.uicomponents.resources.Res
 import alexey.odintsov.kmp.uicomponents.resources.icon_dropdown_arrow_down
-import alexey.odintsov.kmp.uicomponents.theme.SystemTheme
-import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -83,21 +81,16 @@ fun CustomDropDownButton(
 
 @Preview
 @Composable
-fun PreviewCustomDropDownButtonTheme() {
-    Column {
-        ThemeManager.CustomTheme(SystemTheme(true)) {
-            PreviewCustomDropDownButton()
+private fun PreviewCustomDropDownButtonTheme() {
+    PreviewDarkAndLightTheme(true) {
+        Row(Modifier.padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            CustomDropDownButton(
+                items = listOf(
+                    DropDownItem("Save", {}),
+                    DropDownItem("Save As", {})
+                )
+            )
+            CustomDropDownButton(items = listOf(DropDownItem("A", {}), DropDownItem("B", {})))
         }
-        ThemeManager.CustomTheme(SystemTheme(false)) {
-            PreviewCustomDropDownButton()
-        }
-    }
-}
-
-@Composable
-fun PreviewCustomDropDownButton() {
-    Row(Modifier.padding(4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-        CustomDropDownButton(items = listOf(DropDownItem("Save", {}), DropDownItem("Save As", {})))
-        CustomDropDownButton(items = listOf(DropDownItem("A", {}), DropDownItem("B", {})))
     }
 }

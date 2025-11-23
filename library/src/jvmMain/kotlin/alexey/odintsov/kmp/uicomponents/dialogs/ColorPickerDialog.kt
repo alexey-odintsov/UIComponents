@@ -202,7 +202,7 @@ fun rgbaToHsl(color: Color): List<Float> {
 @Preview
 @Composable
 private fun PreviewColorPicker() {
-    PreviewDarkAndLightTheme(false) {
+    PreviewDarkAndLightTheme(true) {
         ColorPicker(Color(.5f, .8f, 1f), {})
     }
 }

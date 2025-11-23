@@ -1,14 +1,11 @@
 package alexey.odintsov.kmp.uicomponents
 
-import alexey.odintsov.kmp.uicomponents.theme.SystemTheme
-import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
+import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -93,21 +90,8 @@ fun CustomDropDown(
 
 @Preview
 @Composable
-fun PreviewCustomDropDownThemes() {
-    Column(modifier = Modifier.padding(4.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        ThemeManager.CustomTheme(SystemTheme(isDark = false)) {
-            PreviewCustomDropDown()
-        }
-        ThemeManager.CustomTheme(SystemTheme(isDark = true)) {
-            PreviewCustomDropDown()
-        }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewCustomDropDown() {
-    Column {
+private fun PreviewCustomDropDown() {
+    PreviewDarkAndLightTheme(true) {
         CustomDropDown(
             modifier = Modifier.width(200.dp),
             items = mutableStateListOf("a", "b", "c"),

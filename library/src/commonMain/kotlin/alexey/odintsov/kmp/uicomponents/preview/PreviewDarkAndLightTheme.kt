@@ -2,17 +2,24 @@ package alexey.odintsov.kmp.uicomponents.preview
 
 import alexey.odintsov.kmp.uicomponents.theme.SystemTheme
 import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun PreviewDarkAndLightTheme(isVertical: Boolean, content: @Composable () -> Unit) {
+fun PreviewDarkAndLightTheme(
+    isVertical: Boolean,
+    spacing: Dp = 10.dp,
+    content: @Composable () -> Unit
+) {
     if (isVertical) {
-        Column {
+        Column(verticalArrangement = Arrangement.spacedBy(spacing)) {
             Box(Modifier.weight(0.5f)) {
                 ThemeManager.CustomTheme(SystemTheme(true)) {
                     content()
@@ -25,7 +32,7 @@ fun PreviewDarkAndLightTheme(isVertical: Boolean, content: @Composable () -> Uni
             }
         }
     } else {
-        Row {
+        Row(horizontalArrangement = Arrangement.spacedBy(spacing)) {
             Box(Modifier.weight(0.5f)) {
                 ThemeManager.CustomTheme(SystemTheme(true)) {
                     content()

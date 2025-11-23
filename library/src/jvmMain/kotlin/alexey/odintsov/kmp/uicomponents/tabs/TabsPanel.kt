@@ -1,7 +1,6 @@
 package alexey.odintsov.kmp.uicomponents.tabs
 
-import alexey.odintsov.kmp.uicomponents.theme.SystemTheme
-import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
+import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -67,31 +66,19 @@ private fun Tab(title: String, index: Int, selected: Boolean, callback: (Int) ->
 
 @Preview
 @Composable
-fun PreviewHorizontalTabs() {
-    Column {
+private fun PreviewHorizontalTabs() {
+    PreviewDarkAndLightTheme(true) {
         TabsPanel(
-            1,
-            mutableStateListOf(
-                "Logs",
-                "CPU Usage",
-                "Memory Analyze",
-                "Device Explorer",
-                "Insights"
-            ),
-            { _ -> })
-        Text("Content")
+            1, mutableStateListOf(
+                "Logs", "CPU Usage", "Memory Analyze", "Device Explorer", "Insights"
+            ), { _ -> })
     }
 }
 
 @Preview
 @Composable
-fun PreviewVerticalTabs() {
-    Column {
-        ThemeManager.CustomTheme(SystemTheme(true)) {
-            TabsPanel(1, mutableStateListOf("Logs", "CPU", "Memory"), { _ -> }, vertical = false)
-        }
-        ThemeManager.CustomTheme(SystemTheme(false)) {
-            TabsPanel(1, mutableStateListOf("Logs", "CPU", "Memory"), { _ -> }, vertical = false)
-        }
+private fun PreviewVerticalTabs() {
+    PreviewDarkAndLightTheme(true) {
+        TabsPanel(1, mutableStateListOf("Logs", "CPU", "Memory"), { _ -> }, vertical = false)
     }
 }

@@ -1,15 +1,13 @@
 package alexey.odintsov.kmp.uicomponents.testapp
 
+import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
 import alexey.odintsov.kmp.uicomponents.table.ColumnAlign
 import alexey.odintsov.kmp.uicomponents.table.ColumnInfo
 import alexey.odintsov.kmp.uicomponents.table.Table
-import alexey.odintsov.kmp.uicomponents.theme.SystemTheme
-import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ContextMenuItem
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -25,11 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -121,8 +114,8 @@ private fun mapAlign(c: ColumnInfo): TextAlign = when (c.align) {
 
 @Preview
 @Composable
-fun PreviewTableScreen() {
-    ThemeManager.CustomTheme(SystemTheme(true)) {
+private fun PreviewTableScreen() {
+    PreviewDarkAndLightTheme(true) {
         TableScreen()
     }
 }

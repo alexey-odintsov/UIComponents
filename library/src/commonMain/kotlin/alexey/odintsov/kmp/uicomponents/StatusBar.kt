@@ -1,12 +1,9 @@
 package alexey.odintsov.kmp.uicomponents
 
-import alexey.odintsov.kmp.uicomponents.theme.SystemTheme
-import alexey.odintsov.kmp.uicomponents.theme.ThemeManager
-import androidx.compose.foundation.background
+import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -66,31 +62,18 @@ private fun truncate(number: Float): String {
 
 @Preview
 @Composable
-fun PreviewStatusBarInProgress() {
+private fun PreviewStatusBarInProgress() {
     val modifier = Modifier
     val text = "/user/test/file.dlt"
-    Box(Modifier.fillMaxSize().background(Color.Black)) {
+
+    PreviewDarkAndLightTheme(true) {
         Column {
-            ThemeManager.CustomTheme(SystemTheme(false)) {
-                Column {
-                    StatusBar(modifier, 0f, text)
-                    StatusBar(modifier, 0.15f, text)
-                    StatusBar(modifier, 0.45f, text)
-                    StatusBar(modifier, 0.5f, text)
-                    StatusBar(modifier, 0.6f, text)
-                    StatusBar(Modifier, 1f, text)
-                }
-            }
-            ThemeManager.CustomTheme(SystemTheme(true)) {
-                Column {
-                    StatusBar(modifier, 0f, text)
-                    StatusBar(modifier, 0.15f, text)
-                    StatusBar(modifier, 0.45f, text)
-                    StatusBar(modifier, 0.5f, text)
-                    StatusBar(modifier, 0.6f, text)
-                    StatusBar(Modifier, 1f, text)
-                }
-            }
+            StatusBar(modifier, 0f, text)
+            StatusBar(modifier, 0.15f, text)
+            StatusBar(modifier, 0.45f, text)
+            StatusBar(modifier, 0.5f, text)
+            StatusBar(modifier, 0.6f, text)
+            StatusBar(Modifier, 1f, text)
         }
     }
 }
