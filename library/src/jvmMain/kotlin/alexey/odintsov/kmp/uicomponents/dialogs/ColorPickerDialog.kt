@@ -1,6 +1,7 @@
 package alexey.odintsov.kmp.uicomponents.dialogs
 
 import alexey.odintsov.kmp.uicomponents.buttons.CustomButton
+import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
@@ -133,7 +134,15 @@ fun ColorPicker(initialColor: Color, onColorUpdate: (Color) -> Unit) {
 
         Spacer(Modifier.height(4.dp))
         CustomButton(
-            onClick = { onColorUpdate(Color.hsv(selectedHue, selectedSaturation, selectedBrightness)) },
+            onClick = {
+                onColorUpdate(
+                    Color.hsv(
+                        selectedHue,
+                        selectedSaturation,
+                        selectedBrightness
+                    )
+                )
+            },
         ) {
             Text("Select")
         }
@@ -192,8 +201,8 @@ fun rgbaToHsl(color: Color): List<Float> {
 
 @Preview
 @Composable
-fun PreviewColorPicker() {
-    Column {
+private fun PreviewColorPicker() {
+    PreviewDarkAndLightTheme(false) {
         ColorPicker(Color(.5f, .8f, 1f), {})
     }
 }
