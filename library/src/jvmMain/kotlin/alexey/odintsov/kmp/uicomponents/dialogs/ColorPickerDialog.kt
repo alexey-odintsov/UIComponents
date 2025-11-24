@@ -37,7 +37,8 @@ fun ColorPickerDialog(
     onColorUpdate: (Color) -> Unit,
 ) {
     DesktopDialogWindow(
-        visible = visible, onCloseRequest = onDialogClosed,
+        visible = visible,
+        onCloseRequest = onDialogClosed,
         title = "Color Picker",
         state = DialogState(width = 300.dp, height = 320.dp)
     ) {
