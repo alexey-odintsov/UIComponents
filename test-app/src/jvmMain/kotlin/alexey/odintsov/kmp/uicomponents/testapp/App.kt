@@ -25,7 +25,7 @@ fun App() {
     ThemeManager.AppTheme {
         var tabIndex by remember { mutableStateOf(0) }
         val tabs = remember {
-            listOf("Buttons", "Table", "Edit").toMutableStateList()
+            listOf("Buttons", "Table", "Edit", "Dialogs").toMutableStateList()
         }
 
         Column(
@@ -45,6 +45,7 @@ fun App() {
                     0 -> ButtonsScreen()
                     1 -> TableScreen()
                     2 -> EditScreen()
+                    3 -> DialogsScreen()
                 }
             }
             StatusBar(progress = 0.5f, statusText = "Loading")

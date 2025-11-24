@@ -28,7 +28,6 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogState
-import androidx.compose.ui.window.DialogWindow
 
 @Composable
 fun ColorPickerDialog(
@@ -37,7 +36,7 @@ fun ColorPickerDialog(
     initialColor: Color,
     onColorUpdate: (Color) -> Unit,
 ) {
-    DialogWindow(
+    DesktopDialogWindow(
         visible = visible, onCloseRequest = onDialogClosed,
         title = "Color Picker",
         state = DialogState(width = 300.dp, height = 320.dp)
