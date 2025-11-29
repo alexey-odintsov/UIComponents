@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.android.kotlin.multiplatform.library)
-//    alias(libs.plugins.vanniktech.mavenPublish)
+    alias(libs.plugins.vanniktech.mavenPublish)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
@@ -13,6 +13,7 @@ plugins {
 
 group = "alexey.odintsov.kmp"
 version = "0.0.25"
+val isCiBuild = System.getenv("CI")?.toBoolean() ?: false
 
 kotlin {
     jvm()
@@ -62,37 +63,37 @@ kotlin {
     }
 }
 
-//mavenPublishing {
-//    publishToMavenCentral()
-////        signAllPublications()
-//    coordinates(group.toString(), "uicomponents", version.toString())
-//
-//    pom {
-//        name = "UIComponents"
-//        description = "A library."
-//        inceptionYear = "2025"
-////            url = "https://github.com/kotlin/multiplatform-library-template/"
-//    }
-//}
+if (!isCiBuild) {
+    mavenPublishing {
+        publishToMavenCentral()
+//        signAllPublications()
+        coordinates(group.toString(), "uicomponents", version.toString())
 
-
-publishing {
-    publications {
-        create<MavenPublication>("gpr") {
-            from(components["kotlin"])
-            groupId = group.toString()
-            artifactId = "uicomponents"
-            version = version.toString()
+        pom {
+            name = "UIComponents"
+            description = "A library."
+            inceptionYear = "2025"
         }
     }
+} else {
+    publishing {
+        publications {
+            create<MavenPublication>("gpr") {
+                from(components["kotlin"])
+                groupId = group.toString()
+                artifactId = "uicomponents"
+                version = version.toString()
+            }
+        }
 
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/alexey-odintsov/UIComponents")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/alexey-odintsov/UIComponents")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
             }
         }
     }
