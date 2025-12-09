@@ -85,8 +85,8 @@ fun <T> Table(
     columns: SnapshotStateList<ColumnInfo>,
     onColumnResized: (String, Float) -> Unit,
     header: @Composable TableRowBuilder.() -> Unit,
-    headerWrapper: @Composable (content: @Composable () -> Unit) -> Unit,
-    rowWrapper: @Composable (index: Int, item: T, content: @Composable () -> Unit) -> Unit,
+    headerWrapper: @Composable (content: @Composable () -> Unit) -> Unit = { content -> content() },
+    rowWrapper: @Composable (index: Int, item: T, content: @Composable () -> Unit) -> Unit = { i, t, content -> content() },
     content: @Composable TableRowBuilder.(index: Int, item: T) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -96,8 +96,8 @@ fun <T> Table(
         state = scrollState,
     ) {
         stickyHeader {
-            val rowBuilder = TableRowBuilder().apply { header() }
             headerWrapper {
+                val rowBuilder = TableRowBuilder().apply { header() }
                 Row(modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)) {
                     rowBuilder.cells
                         .filter { it.columnInfo.visible }

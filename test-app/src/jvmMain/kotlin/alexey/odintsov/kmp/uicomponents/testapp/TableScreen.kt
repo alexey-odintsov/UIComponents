@@ -64,6 +64,14 @@ fun TableScreen() {
                         }
                     }
                 },
+                headerWrapper = { content ->
+                    val menuItems = mutableListOf(
+                        ContextMenuItem("Header menu", {}),
+                    )
+                    ContextMenuArea(items = { menuItems }) {
+                        content()
+                    }
+                },
                 rowWrapper = { i, item, content ->
                     val menuItems = mutableListOf(
                         ContextMenuItem("Menu for #$i ${item.key}", {}),
@@ -78,6 +86,7 @@ fun TableScreen() {
                     2 -> {
                         Color.Yellow.copy(0.5f)
                     }
+
                     else -> {
                         MaterialTheme.colorScheme.surface
                     }
