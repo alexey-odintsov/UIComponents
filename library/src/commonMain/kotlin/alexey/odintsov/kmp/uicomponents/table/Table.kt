@@ -85,6 +85,7 @@ fun <T> Table(
     columns: SnapshotStateList<ColumnInfo>,
     onColumnResized: (String, Float) -> Unit,
     header: @Composable TableRowBuilder.() -> Unit,
+    headerWrapper: @Composable (content: @Composable () -> Unit) -> Unit,
     rowWrapper: @Composable (index: Int, item: T, content: @Composable () -> Unit) -> Unit,
     content: @Composable TableRowBuilder.(index: Int, item: T) -> Unit,
 ) {
@@ -96,26 +97,28 @@ fun <T> Table(
     ) {
         stickyHeader {
             val rowBuilder = TableRowBuilder().apply { header() }
-            Row(modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)) {
-                rowBuilder.cells
-                    .filter { it.columnInfo.visible }
-                    .sortedBy { it.columnInfo.order }
-                    .forEachIndexed { i, cellParams ->
-                    CellWrapper(
-                        column = columns.firstOrNull { it.title == cellParams.columnInfo.title }
-                            ?: ColumnInfo("", visible = false, order = 0),
-                        background = cellParams.background
-                    ) {
-                        cellParams.composable(this)
-                    }
+            headerWrapper {
+                Row(modifier = rowModifier.fillMaxWidth().height(IntrinsicSize.Min)) {
+                    rowBuilder.cells
+                        .filter { it.columnInfo.visible }
+                        .sortedBy { it.columnInfo.order }
+                        .forEachIndexed { i, cellParams ->
+                            CellWrapper(
+                                column = columns.firstOrNull { it.title == cellParams.columnInfo.title }
+                                    ?: ColumnInfo("", visible = false, order = 0),
+                                background = cellParams.background
+                            ) {
+                                cellParams.composable(this)
+                            }
 
-                    if (i < rowBuilder.cells.lastIndex) {
-                        ColumnResizerDivider(
-                            resizable = resizable,
-                            key = cellParams.columnInfo.title,
-                            onResized = onColumnResized,
-                        )
-                    }
+                            if (i < rowBuilder.cells.lastIndex) {
+                                ColumnResizerDivider(
+                                    resizable = resizable,
+                                    key = cellParams.columnInfo.title,
+                                    onResized = onColumnResized,
+                                )
+                            }
+                        }
                 }
             }
             HorizontalDivider()
