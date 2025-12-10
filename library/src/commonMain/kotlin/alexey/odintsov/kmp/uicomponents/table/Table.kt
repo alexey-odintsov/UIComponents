@@ -40,6 +40,7 @@ enum class ColumnAlign {
 }
 
 data class ColumnInfo(
+    val key: String,
     val title: String,
     val size: Float = 0f,
     val weight: Float? = 1f,
@@ -104,8 +105,8 @@ fun <T> Table(
                         .sortedBy { it.columnInfo.order }
                         .forEachIndexed { i, cellParams ->
                             CellWrapper(
-                                column = columns.firstOrNull { it.title == cellParams.columnInfo.title }
-                                    ?: ColumnInfo("", visible = false, order = 0),
+                                column = columns.firstOrNull { it.key == cellParams.columnInfo.key }
+                                    ?: ColumnInfo("", "", visible = false, order = 0),
                                 background = cellParams.background
                             ) {
                                 cellParams.composable(this)
@@ -114,7 +115,7 @@ fun <T> Table(
                             if (i < rowBuilder.cells.lastIndex) {
                                 ColumnResizerDivider(
                                     resizable = resizable,
-                                    key = cellParams.columnInfo.title,
+                                    key = cellParams.columnInfo.key,
                                     onResized = onColumnResized,
                                 )
                             }
@@ -172,8 +173,8 @@ fun <T> Table(
                         .sortedBy { it.columnInfo.order }
                         .forEachIndexed { j, cellParams ->
                             CellWrapper(
-                                column = columns.firstOrNull { it.title == cellParams.columnInfo.title }
-                                    ?: ColumnInfo("", visible = false, order = 0),
+                                column = columns.firstOrNull { it.key == cellParams.columnInfo.key }
+                                    ?: ColumnInfo("","", visible = false, order = 0),
                                 isSelected = i == selectedRow,
                                 background = cellParams.background
                             ) {
@@ -182,7 +183,7 @@ fun <T> Table(
                             if (j < rowBuilder.cells.lastIndex) {
                                 ColumnResizerDivider(
                                     resizable = false,
-                                    key = cellParams.columnInfo.title,
+                                    key = cellParams.columnInfo.key,
                                 )
                             }
                         }

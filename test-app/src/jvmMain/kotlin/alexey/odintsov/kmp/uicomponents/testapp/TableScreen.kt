@@ -98,7 +98,7 @@ fun TableScreen() {
                     ) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),//.border(1.dp, Color.Gray),
-                            text = item.data[c.title].toString(),
+                            text = item.data[c.key].toString(),
                             textAlign = mapAlign(c)
                         )
                     }

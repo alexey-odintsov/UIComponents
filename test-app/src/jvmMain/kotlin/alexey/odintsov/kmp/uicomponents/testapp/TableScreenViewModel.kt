@@ -10,6 +10,7 @@ import kotlin.math.max
 class TableScreenViewModel : ViewModel() {
     val columns = mutableStateListOf(
         ColumnInfo(
+            key = "timestamp",
             title = "Timestamp",
             size = 100f,
             weight = null,
@@ -18,8 +19,9 @@ class TableScreenViewModel : ViewModel() {
             align = ColumnAlign.Left,
             metaInfo = hashMapOf("Sortable" to "true"),
         ),
-        ColumnInfo(title = "Tag", size = 60f, weight = null, visible = true, order = 1),
+        ColumnInfo(key = "tag", title = "Tag", size = 60f, weight = null, visible = true, order = 1),
         ColumnInfo(
+            key = "level",
             title = "Level",
             size = 30f,
             weight = null,
@@ -28,6 +30,7 @@ class TableScreenViewModel : ViewModel() {
             align = ColumnAlign.Center
         ),
         ColumnInfo(
+            key = "message",
             title = "Message",
             size = 0f,
             weight = 1f,
@@ -44,10 +47,10 @@ class TableScreenViewModel : ViewModel() {
     val items = (1..100).map {
         val message = ('A'..'z').map { it }.shuffled().subList(0, 40).joinToString("")
         val values = hashMapOf<String, String>(
-            columns[0].title to System.currentTimeMillis().toString(),
-            columns[1].title to tags.random(),
-            columns[2].title to levels.random(),
-            columns[3].title to message,
+            columns[0].key to System.currentTimeMillis().toString(),
+            columns[1].key to tags.random(),
+            columns[2].key to levels.random(),
+            columns[3].key to message,
             )
         LogItem(message, values)
     }
@@ -56,8 +59,8 @@ class TableScreenViewModel : ViewModel() {
         selectedRowIndex.value = index
     }
 
-    fun onColumnResized(columnKey: String, delta: Float) {
-        val column = columns.firstOrNull { it.title == columnKey }
+    fun onColumnResized(key: String, delta: Float) {
+        val column = columns.firstOrNull { it.key == key }
         val index = columns.indexOf(column)
         if (column != null) {
             val newSize = max(column.size + delta, 20f)
