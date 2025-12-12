@@ -1,5 +1,7 @@
 package alexey.odintsov.kmp.uicomponents.testapp
 
+import alexey.odintsov.kmp.uicomponents.buttons.CustomButton
+import alexey.odintsov.kmp.uicomponents.edit.CustomEditText
 import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
 import alexey.odintsov.kmp.uicomponents.table.ColumnAlign
 import alexey.odintsov.kmp.uicomponents.table.ColumnInfo
@@ -10,6 +12,7 @@ import androidx.compose.foundation.ContextMenuItem
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,8 +45,21 @@ fun TableScreen() {
     val items = viewModel.items
     val onColumnResized = viewModel::onColumnResized
     val scrollState = remember { LazyListState() }
+    var colorValue = remember { 0 }
+    val colors = viewModel.colors
 
     Column(Modifier.padding(32.dp)) {
+        Row {
+            CustomEditText(colorValue.toString(), onValueChange = {
+                colorValue = it.toIntOrNull() ?: 0
+            })
+            CustomButton(onClick = {
+                viewModel.changeColor(colorValue, Color.Red)
+            }) {
+                Text("Change color")
+            }
+        }
+
         Box {
             Table<LogItem>(
                 items = items,
@@ -82,15 +98,8 @@ fun TableScreen() {
                     }
                 },
             ) { i, item ->
-                val color = when (i) {
-                    2 -> {
-                        Color.Yellow.copy(0.5f)
-                    }
+                val color = colors[i] ?: MaterialTheme.colorScheme.surface
 
-                    else -> {
-                        MaterialTheme.colorScheme.surface
-                    }
-                }
                 columns.forEach { c ->
                     cell(
                         background = color,

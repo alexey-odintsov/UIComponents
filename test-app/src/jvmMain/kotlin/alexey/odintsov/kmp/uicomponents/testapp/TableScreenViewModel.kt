@@ -3,7 +3,9 @@ package alexey.odintsov.kmp.uicomponents.testapp
 import alexey.odintsov.kmp.uicomponents.table.ColumnAlign
 import alexey.odintsov.kmp.uicomponents.table.ColumnInfo
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import kotlin.math.max
 
@@ -41,6 +43,7 @@ class TableScreenViewModel : ViewModel() {
     )
 
     val selectedRowIndex = mutableStateOf<Int?>(null)
+    val colors = mutableStateMapOf<Int, Color>()
 
     val tags = listOf("System", "Monitoring", "App")
     val levels = listOf("V", "D", "W", "E", "F")
@@ -53,6 +56,10 @@ class TableScreenViewModel : ViewModel() {
             columns[3].key to message,
             )
         LogItem(message, values)
+    }
+
+    fun changeColor(index: Int, color: Color) {
+        colors[index] = color
     }
 
     fun onRowSelected(index: Int) {
