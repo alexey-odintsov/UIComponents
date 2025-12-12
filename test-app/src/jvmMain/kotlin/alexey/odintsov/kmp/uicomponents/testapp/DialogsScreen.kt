@@ -2,6 +2,9 @@ package alexey.odintsov.kmp.uicomponents.testapp
 
 import alexey.odintsov.kmp.uicomponents.buttons.CustomButton
 import alexey.odintsov.kmp.uicomponents.dialogs.ColorPickerDialog
+import alexey.odintsov.kmp.uicomponents.dialogs.DialogOperation
+import alexey.odintsov.kmp.uicomponents.dialogs.FileDialog
+import alexey.odintsov.kmp.uicomponents.dialogs.FileDialogState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +25,9 @@ fun DialogsScreen() {
     var showDialog by remember { mutableStateOf(false) }
     var selectedColor by remember { mutableStateOf(Color.Cyan) }
 
+    var showFileDialog by remember { mutableStateOf(false) }
+    var selectedFile by remember { mutableStateOf<String?>(null) }
+
     if (showDialog) {
         ColorPickerDialog(
             visible = showDialog,
@@ -31,6 +37,22 @@ fun DialogsScreen() {
                 selectedColor = it
                 showDialog = false
             }
+        )
+    }
+    if (showFileDialog) {
+        FileDialog(
+            FileDialogState(
+                visible = true,
+                operation = DialogOperation.OPEN,
+                title = "Open file",
+                fileCallback = {
+                    selectedFile = it.toString()
+                    showFileDialog = false
+                },
+                cancelCallback = {
+                    showFileDialog = false
+                }
+            )
         )
     }
 
@@ -43,6 +65,15 @@ fun DialogsScreen() {
                 Text("ColorPicker")
             }
             Text("Selected color: $selectedColor")
+        }
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CustomButton(onClick = { showFileDialog = true }) {
+                Text("Open file dialog")
+            }
+            Text("Selected file: $selectedFile")
         }
     }
 }
