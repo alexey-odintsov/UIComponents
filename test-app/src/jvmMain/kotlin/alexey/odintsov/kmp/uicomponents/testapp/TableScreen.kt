@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -66,6 +67,17 @@ fun TableScreen() {
                 items = viewModel.items,
                 columns = columns,
                 scrollState = scrollState,
+                onColumnResized = onColumnResized,
+                selectedRow = viewModel.selectedRowIndex.value,
+                onRowSelected = viewModel::onRowSelected,
+                headerCellContent = { column ->
+                    val menuItems = mutableListOf(
+                        ContextMenuItem("Hide ${column.title} ", {}),
+                    )
+                    ContextMenuArea(items = { menuItems }) {
+                        Text(column.title, Modifier.padding(2.dp))
+                    }
+                },
                 rowWrapContent = { i, item, content ->
                     val menuItems = mutableListOf(
                         ContextMenuItem("Menu for #$i ${item.key}", {}),
@@ -78,8 +90,8 @@ fun TableScreen() {
                         }
                     }
                 },
-                cellContent = { i, c, item ->
-                    Text(item.data[c.key] ?: "", Modifier.padding(2.dp))
+                cellContent = { index, column, item ->
+                    Text(item.data[column.key] ?: "", Modifier.padding(2.dp))
                 }
             )
 
