@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -68,8 +70,6 @@ fun TableScreen() {
                 columns = columns,
                 scrollState = scrollState,
                 onColumnResized = onColumnResized,
-                selectedRow = viewModel.selectedRowIndex.value,
-                onRowSelected = viewModel::onRowSelected,
                 headerCellContent = { column ->
                     val menuItems = mutableListOf(
                         ContextMenuItem("Hide ${column.title} ", {}),
@@ -84,8 +84,20 @@ fun TableScreen() {
                         ContextMenuItem("Menu 2 for #$i ${item.key}", {}),
                     )
                     ContextMenuArea(items = { menuItems }) {
-                        val color = colors[i] ?: Color.White
-                        Row(Modifier.background(color)) {
+                        val color =
+                            if (viewModel.selectedRowIndex.value == i) Color.Gray else (colors[i]
+                                ?: Color.White)
+                        Row(Modifier.background(color).onFocusChanged { state ->
+                            if (state.isFocused) {
+                                viewModel.onRowSelected(i)
+                            }
+                        }
+                            .selectable(
+                                selected = false,
+                                onClick = {
+                                    viewModel.onRowSelected(i)
+                                }
+                            )) {
                             content()
                         }
                     }

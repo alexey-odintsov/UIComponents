@@ -24,8 +24,6 @@ fun <T> Table2(
     items: SnapshotStateList<T>, scrollState: LazyListState,
     columns: SnapshotStateList<ColumnInfo>,
     resizable: Boolean = true,
-    selectedRow: Int? = null,
-    onRowSelected: (Int) -> Unit,
     onColumnResized: (key: String, size: Float) -> Unit,
     headerRowWrapContent: @Composable (content: @Composable RowScope.() -> Unit) -> Unit = ::DefaultHeaderRowWrapContent,
     headerCellContent: @Composable (column: ColumnInfo) -> Unit,
