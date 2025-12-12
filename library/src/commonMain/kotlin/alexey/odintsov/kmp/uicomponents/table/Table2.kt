@@ -1,0 +1,50 @@
+package alexey.odintsov.kmp.uicomponents.table
+
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun <T> Table2(
+    items: SnapshotStateList<T>, scrollState: LazyListState,
+    columns: SnapshotStateList<ColumnInfo>,
+    rowWrapContent: @Composable (index: Int, item: T, content: @Composable RowScope.() -> Unit) -> Unit,
+    cellContent: @Composable (Int, ColumnInfo, T) -> Unit,
+) {
+    LazyColumn(
+        modifier = Modifier.border(1.dp, DividerDefaults.color),
+        state = scrollState,
+    ) {
+        itemsIndexed(items) { i, item ->
+            rowWrapContent(i, item) {
+                columns.forEach { column ->
+                    Box(
+                        modifier = getSizeModifier(column)
+                    ) {
+                        cellContent(i, column, item)
+                    }
+                }
+            }
+            HorizontalDivider()
+        }
+    }
+}
+
+private fun RowScope.getSizeModifier(column: ColumnInfo): Modifier {
+    return when {
+        column.size > 0f -> Modifier.width(column.size.dp)
+        column.weight != null -> Modifier.weight(column.weight)
+        else -> Modifier.weight(1f)
+    }
+}

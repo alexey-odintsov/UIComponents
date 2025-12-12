@@ -5,24 +5,25 @@ import alexey.odintsov.kmp.uicomponents.edit.CustomEditText
 import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
 import alexey.odintsov.kmp.uicomponents.table.ColumnAlign
 import alexey.odintsov.kmp.uicomponents.table.ColumnInfo
-import alexey.odintsov.kmp.uicomponents.table.Table
+import alexey.odintsov.kmp.uicomponents.table.Table2
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ContextMenuItem
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,7 +46,7 @@ fun TableScreen() {
     val items = viewModel.items
     val onColumnResized = viewModel::onColumnResized
     val scrollState = remember { LazyListState() }
-    var colorValue = remember { 0 }
+    var colorValue by remember { mutableStateOf(0) }
     val colors = viewModel.colors
 
     Column(Modifier.padding(32.dp)) {
@@ -61,66 +62,95 @@ fun TableScreen() {
         }
 
         Box {
-            Table<LogItem>(
-                items = items,
-                modifier = Modifier.fillMaxSize(),
+            Table2(
+                items = viewModel.items,
                 columns = columns,
                 scrollState = scrollState,
-                onColumnResized = onColumnResized,
-                selectedRow = viewModel.selectedRowIndex.value,
-                onRowSelected = viewModel::onRowSelected,
-                header = {
-                    columns.forEach { c ->
-                        cell(columnInfo = c) {
-                            Text(
-                                modifier = Modifier.fillMaxSize(),
-                                text = c.title,
-                                textAlign = mapAlign(c),
-                            )
-                        }
-                    }
-                },
-                headerWrapper = { content ->
-                    val menuItems = mutableListOf(
-                        ContextMenuItem("Header menu", {}),
-                    )
-                    ContextMenuArea(items = { menuItems }) {
-                        content()
-                    }
-                },
-                rowWrapper = { i, item, content ->
+                rowWrapContent = { i, item, content ->
                     val menuItems = mutableListOf(
                         ContextMenuItem("Menu for #$i ${item.key}", {}),
                         ContextMenuItem("Menu 2 for #$i ${item.key}", {}),
                     )
                     ContextMenuArea(items = { menuItems }) {
-                        content()
+                        val color = colors[i] ?: Color.White
+                        Row(Modifier.background(color)) {
+                            content()
+                        }
                     }
                 },
-            ) { i, item ->
-                val color = colors[i] ?: MaterialTheme.colorScheme.surface
-
-                columns.forEach { c ->
-                    cell(
-                        background = color,
-                        columnInfo = c,
-                    ) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),//.border(1.dp, Color.Gray),
-                            text = item.data[c.key].toString(),
-                            textAlign = mapAlign(c)
-                        )
-                    }
-
+                cellContent = { i, c, item ->
+                    Text(item.data[c.key] ?: "", Modifier.padding(2.dp))
                 }
-            }
+            )
+
             VerticalScrollbar(
                 modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                adapter = rememberScrollbarAdapter(
-                    scrollState = scrollState
-                )
+                adapter = rememberScrollbarAdapter(scrollState = scrollState)
             )
         }
+
+
+//        Box {
+//            Table<LogItem>(
+//                items = items,
+//                modifier = Modifier.fillMaxSize(),
+//                columns = columns,
+//                scrollState = scrollState,
+//                onColumnResized = onColumnResized,
+//                selectedRow = viewModel.selectedRowIndex.value,
+//                onRowSelected = viewModel::onRowSelected,
+//                header = {
+//                    columns.forEach { c ->
+//                        cell(columnInfo = c) {
+//                            Text(
+//                                modifier = Modifier.fillMaxSize(),
+//                                text = c.title,
+//                                textAlign = mapAlign(c),
+//                            )
+//                        }
+//                    }
+//                },
+//                headerWrapper = { content ->
+//                    val menuItems = mutableListOf(
+//                        ContextMenuItem("Header menu", {}),
+//                    )
+//                    ContextMenuArea(items = { menuItems }) {
+//                        content()
+//                    }
+//                },
+//                rowWrapper = { i, item, content ->
+//                    val menuItems = mutableListOf(
+//                        ContextMenuItem("Menu for #$i ${item.key}", {}),
+//                        ContextMenuItem("Menu 2 for #$i ${item.key}", {}),
+//                    )
+//                    ContextMenuArea(items = { menuItems }) {
+//                        content()
+//                    }
+//                },
+//            ) { i, item ->
+//                val color = colors[i] ?: MaterialTheme.colorScheme.surface
+//
+//                columns.forEach { c ->
+//                    cell(
+//                        background = color,
+//                        columnInfo = c,
+//                    ) {
+//                        Text(
+//                            modifier = Modifier.fillMaxWidth(),//.border(1.dp, Color.Gray),
+//                            text = item.data[c.key].toString(),
+//                            textAlign = mapAlign(c)
+//                        )
+//                    }
+//
+//                }
+//            }
+//            VerticalScrollbar(
+//                modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+//                adapter = rememberScrollbarAdapter(
+//                    scrollState = scrollState
+//                )
+//            )
+//        }
     }
 }
 

@@ -5,6 +5,7 @@ import alexey.odintsov.kmp.uicomponents.table.ColumnInfo
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import kotlin.math.max
@@ -56,7 +57,7 @@ class TableScreenViewModel : ViewModel() {
             columns[3].key to message,
             )
         LogItem(message, values)
-    }
+    }.toMutableStateList()
 
     fun changeColor(index: Int, color: Color) {
         colors[index] = color

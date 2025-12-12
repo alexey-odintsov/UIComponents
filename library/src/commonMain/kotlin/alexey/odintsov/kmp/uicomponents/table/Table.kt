@@ -76,7 +76,7 @@ class TableRowBuilder() {
 
 @Composable
 fun <T> Table(
-    items: List<T>,
+    items: SnapshotStateList<T>,
     modifier: Modifier = Modifier,
     scrollState: LazyListState,
     rowModifier: Modifier = Modifier,
