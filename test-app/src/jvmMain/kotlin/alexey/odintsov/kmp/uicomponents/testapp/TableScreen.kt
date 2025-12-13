@@ -102,7 +102,12 @@ fun TableScreen() {
                                 Text(column.title, Modifier.padding(2.dp))
                             }
                         },
-                        rowWrapContent = { i, item, content ->
+                        headerRowWrapContent = { modifier, content ->
+                            Row(modifier) {
+                                content()
+                            }
+                        },
+                        rowWrapContent = { modifier, i, item, content ->
                             val menuItems = mutableListOf(
                                 ContextMenuItem("Menu for #$i ${item.key}", {}),
                                 ContextMenuItem("Menu 2 for #$i ${item.key}", {}),
@@ -112,7 +117,7 @@ fun TableScreen() {
                                     if (viewModel.selectedRowIndex.value == i) Color.Gray else (colors[i]
                                         ?: MaterialTheme.colorScheme.surfaceBright)
                                 Row(
-                                    Modifier
+                                    modifier
                                         .background(color)
                                         .onFocusChanged { state ->
                                             if (state.isFocused) {

@@ -38,9 +38,9 @@ fun <T> Table2(
     columns: SnapshotStateList<ColumnInfo>,
     resizable: Boolean = true,
     onColumnResized: (key: String, size: Float) -> Unit = { _, _ -> },
-    headerRowWrapContent: @Composable (content: @Composable RowScope.() -> Unit) -> Unit = ::DefaultHeaderRowWrapContent,
+    headerRowWrapContent: @Composable (modifier: Modifier, content: @Composable RowScope.() -> Unit) -> Unit = ::DefaultHeaderRowWrapContent,
     headerCellContent: @Composable (column: ColumnInfo) -> Unit = ::DefaultHeaderCellContent,
-    rowWrapContent: @Composable (index: Int, item: T, content: @Composable RowScope.() -> Unit) -> Unit = ::DefaultRowWrapContent,
+    rowWrapContent: @Composable (modifier: Modifier, index: Int, item: T, content: @Composable RowScope.() -> Unit) -> Unit = ::DefaultRowWrapContent,
     cellContent: @Composable (index: Int, column: ColumnInfo, T) -> Unit = ::DefaultCellContent,
 ) {
     LazyColumn(
@@ -48,7 +48,7 @@ fun <T> Table2(
         state = scrollState,
     ) {
         stickyHeader {
-            headerRowWrapContent {
+            headerRowWrapContent(Modifier.height(IntrinsicSize.Min)) {
                 columns.forEach { column ->
                     Box(
                         modifier = getSizeModifier(column)
@@ -66,7 +66,7 @@ fun <T> Table2(
             HorizontalDivider()
         }
         itemsIndexed(items) { i, item ->
-            rowWrapContent(i, item) {
+            rowWrapContent(Modifier.height(IntrinsicSize.Min), i, item) {
                 columns.forEach { column ->
                     Box(
                         modifier = getSizeModifier(column)
@@ -83,29 +83,32 @@ fun <T> Table2(
 
 @Composable
 fun <T> DefaultCellContent(index: Int, column: ColumnInfo, item: T) {
-    Text(item.toString())
+    Text(text = item.toString())
 }
 
 @Composable
 fun DefaultHeaderCellContent(column: ColumnInfo) {
-    Text(column.title)
+    Text(text = column.title, style = MaterialTheme.typography.titleSmall)
 }
 
 @Composable
-fun DefaultHeaderRowWrapContent(content: @Composable RowScope.() -> Unit) {
+fun DefaultHeaderRowWrapContent(modifier: Modifier, content: @Composable RowScope.() -> Unit) {
     Row(
-        Modifier.background(MaterialTheme.colorScheme.surfaceBright).fillMaxWidth()
-            .height(IntrinsicSize.Min)
+        modifier.background(MaterialTheme.colorScheme.surfaceBright).fillMaxWidth()
     ) {
         content()
     }
 }
 
 @Composable
-fun <T> DefaultRowWrapContent(index: Int, item: T, content: @Composable RowScope.() -> Unit) {
+fun <T> DefaultRowWrapContent(
+    modifier: Modifier,
+    index: Int,
+    item: T,
+    content: @Composable RowScope.() -> Unit
+) {
     Row(
-        Modifier.background(MaterialTheme.colorScheme.surfaceBright).fillMaxWidth()
-            .height(IntrinsicSize.Min)
+        modifier.background(MaterialTheme.colorScheme.surfaceBright).fillMaxWidth()
     ) {
         content()
     }
