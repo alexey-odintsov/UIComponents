@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -24,6 +25,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -56,7 +58,7 @@ fun <T> Table2(
                         headerCellContent(column)
                     }
                     ColumnResizerDivider(
-                        modifier = Modifier.fillMaxHeight(), // todo fill max height
+                        modifier = Modifier.fillMaxHeight(),
                         resizable = resizable,
                         key = column.key,
                         onResized = onColumnResized,
@@ -83,12 +85,21 @@ fun <T> Table2(
 
 @Composable
 fun <T> DefaultCellContent(index: Int, column: ColumnInfo, item: T) {
-    Text(text = item.toString())
+    Text(
+        modifier = Modifier.fillMaxSize(),
+        text = item.toString(),
+        textAlign = mapAlign(column)
+    )
 }
 
 @Composable
 fun DefaultHeaderCellContent(column: ColumnInfo) {
-    Text(text = column.title, style = MaterialTheme.typography.titleSmall)
+    Text(
+        modifier = Modifier.fillMaxSize(),
+        text = column.title,
+        style = MaterialTheme.typography.titleSmall,
+        textAlign = mapAlign(column)
+    )
 }
 
 @Composable
@@ -120,6 +131,12 @@ private fun RowScope.getSizeModifier(column: ColumnInfo): Modifier {
         column.weight != null -> Modifier.weight(column.weight)
         else -> Modifier.weight(1f)
     }
+}
+
+fun mapAlign(c: ColumnInfo): TextAlign = when (c.align) {
+    ColumnAlign.Left -> TextAlign.Left
+    ColumnAlign.Center -> TextAlign.Center
+    ColumnAlign.Right -> TextAlign.Right
 }
 
 @Preview

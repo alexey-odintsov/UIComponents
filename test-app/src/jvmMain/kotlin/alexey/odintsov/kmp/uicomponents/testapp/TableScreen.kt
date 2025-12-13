@@ -3,9 +3,8 @@ package alexey.odintsov.kmp.uicomponents.testapp
 import alexey.odintsov.kmp.uicomponents.buttons.CustomButton
 import alexey.odintsov.kmp.uicomponents.edit.CustomEditText
 import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
-import alexey.odintsov.kmp.uicomponents.table.ColumnAlign
-import alexey.odintsov.kmp.uicomponents.table.ColumnInfo
 import alexey.odintsov.kmp.uicomponents.table.DesktopTable
+import alexey.odintsov.kmp.uicomponents.table.mapAlign
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ContextMenuItem
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.selection.selectable
@@ -34,7 +34,6 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -80,7 +79,18 @@ fun TableScreen() {
                         scrollState = scrollState2,
                         onColumnResized = onColumnResized,
                         cellContent = { index, column, item ->
-                            Text(item.data[column.key] ?: "", Modifier.padding(2.dp))
+                            Row {
+                                Text(
+                                    item.data[column.key] ?: "",
+                                    Modifier.weight(1f).padding(2.dp),
+                                    textAlign = mapAlign(column)
+                                )
+                                if (column.key == "message") {
+                                    CustomButton(onClick = {}) {
+                                        Text("Edit")
+                                    }
+                                }
+                            }
                         }
                     )
                 }
@@ -103,7 +113,7 @@ fun TableScreen() {
                             }
                         },
                         headerRowWrapContent = { modifier, content ->
-                            Row(modifier) {
+                            Row(modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceBright)) {
                                 content()
                             }
                         },
@@ -164,76 +174,7 @@ fun TableScreen() {
                 }
             }
         }
-
-
-//        Box {
-//            Table<LogItem>(
-//                items = items,
-//                modifier = Modifier.fillMaxSize(),
-//                columns = columns,
-//                scrollState = scrollState,
-//                onColumnResized = onColumnResized,
-//                selectedRow = viewModel.selectedRowIndex.value,
-//                onRowSelected = viewModel::onRowSelected,
-//                header = {
-//                    columns.forEach { c ->
-//                        cell(columnInfo = c) {
-//                            Text(
-//                                modifier = Modifier.fillMaxSize(),
-//                                text = c.title,
-//                                textAlign = mapAlign(c),
-//                            )
-//                        }
-//                    }
-//                },
-//                headerWrapper = { content ->
-//                    val menuItems = mutableListOf(
-//                        ContextMenuItem("Header menu", {}),
-//                    )
-//                    ContextMenuArea(items = { menuItems }) {
-//                        content()
-//                    }
-//                },
-//                rowWrapper = { i, item, content ->
-//                    val menuItems = mutableListOf(
-//                        ContextMenuItem("Menu for #$i ${item.key}", {}),
-//                        ContextMenuItem("Menu 2 for #$i ${item.key}", {}),
-//                    )
-//                    ContextMenuArea(items = { menuItems }) {
-//                        content()
-//                    }
-//                },
-//            ) { i, item ->
-//                val color = colors[i] ?: MaterialTheme.colorScheme.surface
-//
-//                columns.forEach { c ->
-//                    cell(
-//                        background = color,
-//                        columnInfo = c,
-//                    ) {
-//                        Text(
-//                            modifier = Modifier.fillMaxWidth(),//.border(1.dp, Color.Gray),
-//                            text = item.data[c.key].toString(),
-//                            textAlign = mapAlign(c)
-//                        )
-//                    }
-//
-//                }
-//            }
-//            VerticalScrollbar(
-//                modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-//                adapter = rememberScrollbarAdapter(
-//                    scrollState = scrollState
-//                )
-//            )
-//        }
     }
-}
-
-private fun mapAlign(c: ColumnInfo): TextAlign = when (c.align) {
-    ColumnAlign.Left -> TextAlign.Left
-    ColumnAlign.Center -> TextAlign.Center
-    ColumnAlign.Right -> TextAlign.Right
 }
 
 @Preview

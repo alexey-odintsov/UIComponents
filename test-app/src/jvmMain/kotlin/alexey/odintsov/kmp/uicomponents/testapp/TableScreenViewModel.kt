@@ -19,10 +19,18 @@ class TableScreenViewModel : ViewModel() {
             weight = null,
             visible = true,
             order = 0,
-            align = ColumnAlign.Left,
+            align = ColumnAlign.Center,
             metaInfo = hashMapOf("Sortable" to "true"),
         ),
-        ColumnInfo(key = "tag", title = "Tag", size = 60f, weight = null, visible = true, order = 1),
+        ColumnInfo(
+            key = "tag",
+            title = "Tag",
+            size = 60f,
+            weight = null,
+            visible = true,
+            order = 1,
+            align = ColumnAlign.Center
+        ),
         ColumnInfo(
             key = "level",
             title = "Level",
@@ -55,7 +63,7 @@ class TableScreenViewModel : ViewModel() {
             columns[1].key to tags.random(),
             columns[2].key to levels.random(),
             columns[3].key to message,
-            )
+        )
         LogItem(message, values)
     }.toMutableStateList()
 
