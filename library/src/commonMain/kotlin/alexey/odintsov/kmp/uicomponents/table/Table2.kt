@@ -71,7 +71,7 @@ fun <T> Table2(
             HorizontalDivider()
         }
         itemsIndexed(items) { i, item ->
-            rowWrapContent(Modifier.height(IntrinsicSize.Min), i, item) {
+            rowWrapContent(Modifier.fillMaxWidth().height(IntrinsicSize.Min), i, item) {
                 columns
                     .filter { it.visible }
                     .sortedBy { it.order }

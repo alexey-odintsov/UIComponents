@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -53,6 +55,7 @@ fun TableScreen() {
     val onColumnResized = viewModel::onColumnResized
     val scrollState = remember { LazyListState() }
     val scrollState2 = remember { LazyListState() }
+    val horizontalScrollState = rememberScrollState(1)
     var colorValue by remember { mutableStateOf(0) }
     val colors = viewModel.colors
     val focusManager = LocalFocusManager.current
@@ -77,6 +80,8 @@ fun TableScreen() {
                         items = viewModel.items,
                         columns = columns,
                         scrollState = scrollState2,
+                        maxWidth = 3000.dp,
+                        horizontalScrollState = horizontalScrollState,
                         onColumnResized = onColumnResized,
                         cellContent = { index, column, item ->
                             Row {
@@ -100,9 +105,12 @@ fun TableScreen() {
                 Column {
                     Text("DesktopTable (Custom)")
                     DesktopTable(
+                        modifier = Modifier.fillMaxSize(),
                         items = viewModel.items,
                         columns = columns,
+                        maxWidth = 3000.dp,
                         scrollState = scrollState,
+                        horizontalScrollState = horizontalScrollState,
                         onColumnResized = onColumnResized,
                         headerCellContent = { column ->
                             val menuItems = mutableListOf(
@@ -168,7 +176,7 @@ fun TableScreen() {
                             }
                         },
                         cellContent = { index, column, item ->
-                            Text(item.data[column.key] ?: "", Modifier.padding(2.dp))
+                            Text(item.data[column.key] ?: "", Modifier.fillMaxWidth().padding(2.dp))
                         }
                     )
                 }
