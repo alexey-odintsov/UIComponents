@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "alexey.odintsov.kmp"
-version = "0.1.0"
+version = "0.1.1"
 val isCiBuild = System.getenv("CI")?.toBoolean() ?: false
 
 kotlin {
