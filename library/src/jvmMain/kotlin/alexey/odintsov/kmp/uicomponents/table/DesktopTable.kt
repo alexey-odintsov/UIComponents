@@ -27,7 +27,8 @@ fun <T> DesktopTable(
     items: SnapshotStateList<T>,
     scrollState: LazyListState = rememberLazyListState(),
     horizontalScrollState: ScrollState,
-    maxWidth: Dp,
+    wrapContent: Boolean = true,
+    maxWidth: Dp = 3000.dp,
     columns: SnapshotStateList<ColumnInfo>,
     resizable: Boolean = true,
     onColumnResized: (key: String, size: Float) -> Unit = { _, _ -> },
@@ -38,7 +39,11 @@ fun <T> DesktopTable(
 ) {
     Box(modifier) {
         Table2(
-            modifier = Modifier.fillMaxHeight().horizontalScroll(horizontalScrollState).width(maxWidth),
+            modifier = if (wrapContent) {
+                Modifier.fillMaxHeight()
+            } else {
+                Modifier.fillMaxHeight().horizontalScroll(horizontalScrollState).width(maxWidth)
+            },
             items = items,
             columns = columns,
             resizable = resizable,
@@ -53,11 +58,13 @@ fun <T> DesktopTable(
             modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
             adapter = rememberScrollbarAdapter(scrollState = scrollState)
         )
-        HorizontalScrollbar(
-            modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth(),
-            adapter = rememberScrollbarAdapter(
-                scrollState = horizontalScrollState
+        if (!wrapContent) {
+            HorizontalScrollbar(
+                modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth(),
+                adapter = rememberScrollbarAdapter(
+                    scrollState = horizontalScrollState
+                )
             )
-        )
+        }
     }
 }

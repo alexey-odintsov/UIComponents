@@ -57,6 +57,7 @@ fun TableScreen() {
     val scrollState2 = remember { LazyListState() }
     val horizontalScrollState = rememberScrollState(1)
     var colorValue by remember { mutableStateOf(0) }
+    var wrapContent by remember { mutableStateOf(false) }
     val colors = viewModel.colors
     val focusManager = LocalFocusManager.current
 
@@ -71,6 +72,9 @@ fun TableScreen() {
                 Text("Change color")
             }
         }
+        CustomButton(onClick = { wrapContent = !wrapContent }) {
+            Text("Wrap content: $wrapContent")
+        }
 
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Box(Modifier.weight(0.5f)) {
@@ -80,7 +84,7 @@ fun TableScreen() {
                         items = viewModel.items,
                         columns = columns,
                         scrollState = scrollState2,
-                        maxWidth = 3000.dp,
+                        wrapContent = wrapContent,
                         horizontalScrollState = horizontalScrollState,
                         onColumnResized = onColumnResized,
                         cellContent = { index, column, item ->
@@ -108,7 +112,7 @@ fun TableScreen() {
                         modifier = Modifier.fillMaxSize(),
                         items = viewModel.items,
                         columns = columns,
-                        maxWidth = 3000.dp,
+                        wrapContent = wrapContent,
                         scrollState = scrollState,
                         horizontalScrollState = horizontalScrollState,
                         onColumnResized = onColumnResized,
