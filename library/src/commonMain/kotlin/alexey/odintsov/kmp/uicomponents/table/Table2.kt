@@ -19,9 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+/**
+ * Renders table with resizable columns.
+ */
 @Composable
 fun <T> Table2(
-    items: SnapshotStateList<T>, scrollState: LazyListState,
+    items: SnapshotStateList<T>,
+    scrollState: LazyListState,
     columns: SnapshotStateList<ColumnInfo>,
     resizable: Boolean = true,
     onColumnResized: (key: String, size: Float) -> Unit,

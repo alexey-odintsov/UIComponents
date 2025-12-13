@@ -55,6 +55,7 @@ fun TableScreen() {
     val items = viewModel.items
     val onColumnResized = viewModel::onColumnResized
     val scrollState = remember { LazyListState() }
+    val scrollState2 = remember { LazyListState() }
     var colorValue by remember { mutableStateOf(0) }
     val colors = viewModel.colors
     val focusManager = LocalFocusManager.current
@@ -71,79 +72,106 @@ fun TableScreen() {
             }
         }
 
-        Box {
-            Table2(
-                items = viewModel.items,
-                columns = columns,
-                scrollState = scrollState,
-                onColumnResized = onColumnResized,
-                headerCellContent = { column ->
-                    val menuItems = mutableListOf(
-                        ContextMenuItem("Hide ${column.title} ", {}),
-                    )
-                    ContextMenuArea(items = { menuItems }) {
-                        Text(column.title, Modifier.padding(2.dp))
+        Row {
+            Box(Modifier.weight(0.5f)) {
+                Table2(
+                    items = viewModel.items,
+                    columns = columns,
+                    scrollState = scrollState2,
+                    onColumnResized = onColumnResized,
+                    headerCellContent = { column ->
+                        val menuItems = mutableListOf(
+                            ContextMenuItem("Hide ${column.title} ", {}),
+                        )
+                        ContextMenuArea(items = { menuItems }) {
+                            Text(column.title, Modifier.padding(2.dp))
+                        }
+                    },
+                    cellContent = { index, column, item ->
+                        Text(item.data[column.key] ?: "", Modifier.padding(2.dp))
                     }
-                },
-                rowWrapContent = { i, item, content ->
-                    val menuItems = mutableListOf(
-                        ContextMenuItem("Menu for #$i ${item.key}", {}),
-                        ContextMenuItem("Menu 2 for #$i ${item.key}", {}),
-                    )
-                    ContextMenuArea(items = { menuItems }) {
-                        val color =
-                            if (viewModel.selectedRowIndex.value == i) Color.Gray else (colors[i]
-                                ?: Color.White)
-                        Row(
-                            Modifier
-                                .background(color)
-                                .onFocusChanged { state ->
-                                    if (state.isFocused) {
-                                        viewModel.onRowSelected(i)
-                                    }
-                                }
-                                .selectable(
-                                    selected = false,
-                                    onClick = {
-                                        viewModel.onRowSelected(i)
-                                    }
-                                )
-                                .onKeyEvent(onKeyEvent = { e ->
-                                    if (e.type == KeyEventType.KeyDown) {
-                                        return@onKeyEvent when (e.key) {
-                                            Key.S, Key.DirectionDown -> {
-                                                if (i < items.lastIndex) {
-                                                    focusManager.moveFocus(FocusDirection.Down)
-                                                }
-                                                true
-                                            }
+                )
 
-                                            Key.W, Key.DirectionUp -> {
-                                                if (i > 0) {
-                                                    focusManager.moveFocus(FocusDirection.Up)
-                                                }
-                                                true
-                                            }
+                VerticalScrollbar(
+                    modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                    adapter = rememberScrollbarAdapter(scrollState = scrollState2)
+                )
+            }
 
-                                            else -> false
+            Box(Modifier.weight(0.5f)) {
+                Table2(
+                    items = viewModel.items,
+                    columns = columns,
+                    scrollState = scrollState,
+                    onColumnResized = onColumnResized,
+                    headerCellContent = { column ->
+                        val menuItems = mutableListOf(
+                            ContextMenuItem("Hide ${column.title} ", {}),
+                        )
+                        ContextMenuArea(items = { menuItems }) {
+                            Text(column.title, Modifier.padding(2.dp))
+                        }
+                    },
+                    rowWrapContent = { i, item, content ->
+                        val menuItems = mutableListOf(
+                            ContextMenuItem("Menu for #$i ${item.key}", {}),
+                            ContextMenuItem("Menu 2 for #$i ${item.key}", {}),
+                        )
+                        ContextMenuArea(items = { menuItems }) {
+                            val color =
+                                if (viewModel.selectedRowIndex.value == i) Color.Gray else (colors[i]
+                                    ?: Color.White)
+                            Row(
+                                Modifier
+                                    .background(color)
+                                    .onFocusChanged { state ->
+                                        if (state.isFocused) {
+                                            viewModel.onRowSelected(i)
                                         }
                                     }
-                                    false
-                                })
-                        ) {
-                            content()
-                        }
-                    }
-                },
-                cellContent = { index, column, item ->
-                    Text(item.data[column.key] ?: "", Modifier.padding(2.dp))
-                }
-            )
+                                    .selectable(
+                                        selected = false,
+                                        onClick = {
+                                            viewModel.onRowSelected(i)
+                                        }
+                                    )
+                                    .onKeyEvent(onKeyEvent = { e ->
+                                        if (e.type == KeyEventType.KeyDown) {
+                                            return@onKeyEvent when (e.key) {
+                                                Key.S, Key.DirectionDown -> {
+                                                    if (i < items.lastIndex) {
+                                                        focusManager.moveFocus(FocusDirection.Down)
+                                                    }
+                                                    true
+                                                }
 
-            VerticalScrollbar(
-                modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                adapter = rememberScrollbarAdapter(scrollState = scrollState)
-            )
+                                                Key.W, Key.DirectionUp -> {
+                                                    if (i > 0) {
+                                                        focusManager.moveFocus(FocusDirection.Up)
+                                                    }
+                                                    true
+                                                }
+
+                                                else -> false
+                                            }
+                                        }
+                                        false
+                                    })
+                            ) {
+                                content()
+                            }
+                        }
+                    },
+                    cellContent = { index, column, item ->
+                        Text(item.data[column.key] ?: "", Modifier.padding(2.dp))
+                    }
+                )
+
+                VerticalScrollbar(
+                    modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                    adapter = rememberScrollbarAdapter(scrollState = scrollState)
+                )
+            }
         }
 
 
