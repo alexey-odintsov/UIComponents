@@ -5,19 +5,17 @@ import alexey.odintsov.kmp.uicomponents.edit.CustomEditText
 import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
 import alexey.odintsov.kmp.uicomponents.table.ColumnAlign
 import alexey.odintsov.kmp.uicomponents.table.ColumnInfo
-import alexey.odintsov.kmp.uicomponents.table.Table2
+import alexey.odintsov.kmp.uicomponents.table.DesktopTable
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ContextMenuItem
-import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
@@ -72,105 +69,101 @@ fun TableScreen() {
             }
         }
 
-        Row {
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Box(Modifier.weight(0.5f)) {
-                Table2(
-                    items = viewModel.items,
-                    columns = columns,
-                    scrollState = scrollState2,
-                    onColumnResized = onColumnResized,
-                    headerCellContent = { column ->
-                        val menuItems = mutableListOf(
-                            ContextMenuItem("Hide ${column.title} ", {}),
-                        )
-                        ContextMenuArea(items = { menuItems }) {
-                            Text(column.title, Modifier.padding(2.dp))
+                Column {
+                    Text("DesktopTable (default)")
+                    DesktopTable(
+                        items = viewModel.items,
+                        columns = columns,
+                        scrollState = scrollState2,
+                        onColumnResized = onColumnResized,
+                        headerCellContent = { column ->
+                            val menuItems = mutableListOf(
+                                ContextMenuItem("Hide ${column.title} ", {}),
+                            )
+                            ContextMenuArea(items = { menuItems }) {
+                                Text(column.title, Modifier.padding(2.dp))
+                            }
+                        },
+                        cellContent = { index, column, item ->
+                            Text(item.data[column.key] ?: "", Modifier.padding(2.dp))
                         }
-                    },
-                    cellContent = { index, column, item ->
-                        Text(item.data[column.key] ?: "", Modifier.padding(2.dp))
-                    }
-                )
-
-                VerticalScrollbar(
-                    modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                    adapter = rememberScrollbarAdapter(scrollState = scrollState2)
-                )
+                    )
+                }
             }
 
             Box(Modifier.weight(0.5f)) {
-                Table2(
-                    items = viewModel.items,
-                    columns = columns,
-                    scrollState = scrollState,
-                    onColumnResized = onColumnResized,
-                    headerCellContent = { column ->
-                        val menuItems = mutableListOf(
-                            ContextMenuItem("Hide ${column.title} ", {}),
-                        )
-                        ContextMenuArea(items = { menuItems }) {
-                            Text(column.title, Modifier.padding(2.dp))
-                        }
-                    },
-                    rowWrapContent = { i, item, content ->
-                        val menuItems = mutableListOf(
-                            ContextMenuItem("Menu for #$i ${item.key}", {}),
-                            ContextMenuItem("Menu 2 for #$i ${item.key}", {}),
-                        )
-                        ContextMenuArea(items = { menuItems }) {
-                            val color =
-                                if (viewModel.selectedRowIndex.value == i) Color.Gray else (colors[i]
-                                    ?: Color.White)
-                            Row(
-                                Modifier
-                                    .background(color)
-                                    .onFocusChanged { state ->
-                                        if (state.isFocused) {
-                                            viewModel.onRowSelected(i)
-                                        }
-                                    }
-                                    .selectable(
-                                        selected = false,
-                                        onClick = {
-                                            viewModel.onRowSelected(i)
-                                        }
-                                    )
-                                    .onKeyEvent(onKeyEvent = { e ->
-                                        if (e.type == KeyEventType.KeyDown) {
-                                            return@onKeyEvent when (e.key) {
-                                                Key.S, Key.DirectionDown -> {
-                                                    if (i < items.lastIndex) {
-                                                        focusManager.moveFocus(FocusDirection.Down)
-                                                    }
-                                                    true
-                                                }
-
-                                                Key.W, Key.DirectionUp -> {
-                                                    if (i > 0) {
-                                                        focusManager.moveFocus(FocusDirection.Up)
-                                                    }
-                                                    true
-                                                }
-
-                                                else -> false
+                Column {
+                    Text("DesktopTable (Custom)")
+                    DesktopTable(
+                        items = viewModel.items,
+                        columns = columns,
+                        scrollState = scrollState,
+                        onColumnResized = onColumnResized,
+                        headerCellContent = { column ->
+                            val menuItems = mutableListOf(
+                                ContextMenuItem("Hide ${column.title} ", {}),
+                            )
+                            ContextMenuArea(items = { menuItems }) {
+                                Text(column.title, Modifier.padding(2.dp))
+                            }
+                        },
+                        rowWrapContent = { i, item, content ->
+                            val menuItems = mutableListOf(
+                                ContextMenuItem("Menu for #$i ${item.key}", {}),
+                                ContextMenuItem("Menu 2 for #$i ${item.key}", {}),
+                            )
+                            ContextMenuArea(items = { menuItems }) {
+                                val color =
+                                    if (viewModel.selectedRowIndex.value == i) Color.Gray else (colors[i]
+                                        ?: Color.White)
+                                Row(
+                                    Modifier
+                                        .background(color)
+                                        .onFocusChanged { state ->
+                                            if (state.isFocused) {
+                                                viewModel.onRowSelected(i)
                                             }
                                         }
-                                        false
-                                    })
-                            ) {
-                                content()
-                            }
-                        }
-                    },
-                    cellContent = { index, column, item ->
-                        Text(item.data[column.key] ?: "", Modifier.padding(2.dp))
-                    }
-                )
+                                        .selectable(
+                                            selected = false,
+                                            onClick = {
+                                                viewModel.onRowSelected(i)
+                                            }
+                                        )
+                                        .onKeyEvent(onKeyEvent = { e ->
+                                            if (e.type == KeyEventType.KeyDown) {
+                                                return@onKeyEvent when (e.key) {
+                                                    Key.S, Key.DirectionDown -> {
+                                                        if (i < items.lastIndex) {
+                                                            focusManager.moveFocus(FocusDirection.Down)
+                                                        }
+                                                        true
+                                                    }
 
-                VerticalScrollbar(
-                    modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                    adapter = rememberScrollbarAdapter(scrollState = scrollState)
-                )
+                                                    Key.W, Key.DirectionUp -> {
+                                                        if (i > 0) {
+                                                            focusManager.moveFocus(FocusDirection.Up)
+                                                        }
+                                                        true
+                                                    }
+
+                                                    else -> false
+                                                }
+                                            }
+                                            false
+                                        })
+                                ) {
+                                    content()
+                                }
+                            }
+                        },
+                        cellContent = { index, column, item ->
+                            Text(item.data[column.key] ?: "", Modifier.padding(2.dp))
+                        }
+                    )
+                }
             }
         }
 
