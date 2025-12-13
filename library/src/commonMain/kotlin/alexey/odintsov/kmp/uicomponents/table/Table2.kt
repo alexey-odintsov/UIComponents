@@ -41,7 +41,7 @@ fun <T> Table2(
     cellContent: @Composable (index: Int, column: ColumnInfo, T) -> Unit = ::DefaultCellContent,
 ) {
     LazyColumn(
-        modifier = Modifier.border(1.dp, DividerDefaults.color),
+        modifier = modifier.border(1.dp, DividerDefaults.color),
         state = scrollState,
     ) {
         stickyHeader {

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -16,14 +17,14 @@ import androidx.compose.ui.Modifier
 fun <T> DesktopTable(
     modifier: Modifier = Modifier,
     items: SnapshotStateList<T>,
-    scrollState: LazyListState,
+    scrollState: LazyListState = rememberLazyListState(),
     columns: SnapshotStateList<ColumnInfo>,
     resizable: Boolean = true,
-    onColumnResized: (key: String, size: Float) -> Unit,
+    onColumnResized: (key: String, size: Float) -> Unit = { _, _ -> },
     headerRowWrapContent: @Composable (content: @Composable RowScope.() -> Unit) -> Unit = ::DefaultHeaderRowWrapContent,
-    headerCellContent: @Composable (column: ColumnInfo) -> Unit,
+    headerCellContent: @Composable (column: ColumnInfo) -> Unit = ::DefaultHeaderCellContent,
     rowWrapContent: @Composable (index: Int, item: T, content: @Composable RowScope.() -> Unit) -> Unit = ::DefaultRowWrapContent,
-    cellContent: @Composable (index: Int, column: ColumnInfo, T) -> Unit,
+    cellContent: @Composable (index: Int, column: ColumnInfo, T) -> Unit = ::DefaultCellContent,
 ) {
     Box(modifier) {
         Table2(

@@ -79,14 +79,6 @@ fun TableScreen() {
                         columns = columns,
                         scrollState = scrollState2,
                         onColumnResized = onColumnResized,
-                        headerCellContent = { column ->
-                            val menuItems = mutableListOf(
-                                ContextMenuItem("Hide ${column.title} ", {}),
-                            )
-                            ContextMenuArea(items = { menuItems }) {
-                                Text(column.title, Modifier.padding(2.dp))
-                            }
-                        },
                         cellContent = { index, column, item ->
                             Text(item.data[column.key] ?: "", Modifier.padding(2.dp))
                         }
