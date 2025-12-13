@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -28,8 +27,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,6 +57,7 @@ fun TableScreen() {
     val scrollState = remember { LazyListState() }
     var colorValue by remember { mutableStateOf(0) }
     val colors = viewModel.colors
+    val focusManager = LocalFocusManager.current
 
     Column(Modifier.padding(32.dp)) {
         Row {
@@ -87,17 +94,43 @@ fun TableScreen() {
                         val color =
                             if (viewModel.selectedRowIndex.value == i) Color.Gray else (colors[i]
                                 ?: Color.White)
-                        Row(Modifier.background(color).onFocusChanged { state ->
-                            if (state.isFocused) {
-                                viewModel.onRowSelected(i)
-                            }
-                        }
-                            .selectable(
-                                selected = false,
-                                onClick = {
-                                    viewModel.onRowSelected(i)
+                        Row(
+                            Modifier
+                                .background(color)
+                                .onFocusChanged { state ->
+                                    if (state.isFocused) {
+                                        viewModel.onRowSelected(i)
+                                    }
                                 }
-                            )) {
+                                .selectable(
+                                    selected = false,
+                                    onClick = {
+                                        viewModel.onRowSelected(i)
+                                    }
+                                )
+                                .onKeyEvent(onKeyEvent = { e ->
+                                    if (e.type == KeyEventType.KeyDown) {
+                                        return@onKeyEvent when (e.key) {
+                                            Key.S, Key.DirectionDown -> {
+                                                if (i < items.lastIndex) {
+                                                    focusManager.moveFocus(FocusDirection.Down)
+                                                }
+                                                true
+                                            }
+
+                                            Key.W, Key.DirectionUp -> {
+                                                if (i > 0) {
+                                                    focusManager.moveFocus(FocusDirection.Up)
+                                                }
+                                                true
+                                            }
+
+                                            else -> false
+                                        }
+                                    }
+                                    false
+                                })
+                        ) {
                             content()
                         }
                     }
