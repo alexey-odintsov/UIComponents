@@ -3,8 +3,10 @@ package alexey.odintsov.kmp.uicomponents.table
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -16,6 +18,7 @@ import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -47,17 +50,17 @@ fun <T> Table2(
         stickyHeader {
             headerRowWrapContent {
                 columns.forEach { column ->
-                    Row(
+                    Box(
                         modifier = getSizeModifier(column)
                     ) {
                         headerCellContent(column)
-                        ColumnResizerDivider(
-                            modifier = Modifier.height(20.dp), // todo fill max height
-                            resizable = resizable,
-                            key = column.key,
-                            onResized = onColumnResized,
-                        )
                     }
+                    ColumnResizerDivider(
+                        modifier = Modifier.fillMaxHeight(), // todo fill max height
+                        resizable = resizable,
+                        key = column.key,
+                        onResized = onColumnResized,
+                    )
                 }
             }
             HorizontalDivider()
@@ -70,6 +73,7 @@ fun <T> Table2(
                     ) {
                         cellContent(i, column, item)
                     }
+                    VerticalDivider(Modifier.fillMaxHeight())
                 }
             }
             HorizontalDivider()
@@ -89,14 +93,20 @@ fun DefaultHeaderCellContent(column: ColumnInfo) {
 
 @Composable
 fun DefaultHeaderRowWrapContent(content: @Composable RowScope.() -> Unit) {
-    Row(Modifier.background(MaterialTheme.colorScheme.surfaceBright).fillMaxWidth()) {
+    Row(
+        Modifier.background(MaterialTheme.colorScheme.surfaceBright).fillMaxWidth()
+            .height(IntrinsicSize.Min)
+    ) {
         content()
     }
 }
 
 @Composable
 fun <T> DefaultRowWrapContent(index: Int, item: T, content: @Composable RowScope.() -> Unit) {
-    Row(Modifier.background(MaterialTheme.colorScheme.surfaceBright).fillMaxWidth()) {
+    Row(
+        Modifier.background(MaterialTheme.colorScheme.surfaceBright).fillMaxWidth()
+            .height(IntrinsicSize.Min)
+    ) {
         content()
     }
 }
