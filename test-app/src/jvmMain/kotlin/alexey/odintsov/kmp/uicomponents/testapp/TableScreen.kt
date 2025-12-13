@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -117,7 +118,7 @@ fun TableScreen() {
                             ContextMenuArea(items = { menuItems }) {
                                 val color =
                                     if (viewModel.selectedRowIndex.value == i) Color.Gray else (colors[i]
-                                        ?: Color.White)
+                                        ?: MaterialTheme.colorScheme.surfaceBright)
                                 Row(
                                     Modifier
                                         .background(color)

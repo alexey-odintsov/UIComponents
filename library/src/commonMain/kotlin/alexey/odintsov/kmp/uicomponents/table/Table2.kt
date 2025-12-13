@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -76,14 +77,14 @@ fun <T> Table2(
 
 @Composable
 fun DefaultHeaderRowWrapContent(content: @Composable RowScope.() -> Unit) {
-    Row(Modifier.background(Color.White).fillMaxWidth()) {
+    Row(Modifier.background(MaterialTheme.colorScheme.surfaceBright).fillMaxWidth()) {
         content()
     }
 }
 
 @Composable
 fun <T> DefaultRowWrapContent(index: Int, item: T, content: @Composable RowScope.() -> Unit) {
-    Row {
+    Row(Modifier.background(MaterialTheme.colorScheme.surfaceBright).fillMaxWidth()) {
         content()
     }
 }
