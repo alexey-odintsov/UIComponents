@@ -51,32 +51,38 @@ fun <T> Table2(
     ) {
         stickyHeader {
             headerRowWrapContent(Modifier.height(IntrinsicSize.Min)) {
-                columns.forEach { column ->
-                    Box(
-                        modifier = getSizeModifier(column)
-                    ) {
-                        headerCellContent(column)
+                columns
+                    .filter { it.visible }
+                    .sortedBy { it.order }
+                    .forEach { column ->
+                        Box(
+                            modifier = getSizeModifier(column)
+                        ) {
+                            headerCellContent(column)
+                        }
+                        ColumnResizerDivider(
+                            modifier = Modifier.fillMaxHeight(),
+                            resizable = resizable,
+                            key = column.key,
+                            onResized = onColumnResized,
+                        )
                     }
-                    ColumnResizerDivider(
-                        modifier = Modifier.fillMaxHeight(),
-                        resizable = resizable,
-                        key = column.key,
-                        onResized = onColumnResized,
-                    )
-                }
             }
             HorizontalDivider()
         }
         itemsIndexed(items) { i, item ->
             rowWrapContent(Modifier.height(IntrinsicSize.Min), i, item) {
-                columns.forEach { column ->
-                    Box(
-                        modifier = getSizeModifier(column)
-                    ) {
-                        cellContent(i, column, item)
+                columns
+                    .filter { it.visible }
+                    .sortedBy { it.order }
+                    .forEach { column ->
+                        Box(
+                            modifier = getSizeModifier(column)
+                        ) {
+                            cellContent(i, column, item)
+                        }
+                        VerticalDivider(Modifier.fillMaxHeight())
                     }
-                    VerticalDivider(Modifier.fillMaxHeight())
-                }
             }
             HorizontalDivider()
         }
