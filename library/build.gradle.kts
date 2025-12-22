@@ -13,7 +13,9 @@ plugins {
 
 val libraryGroup = "alexey.odintsov"
 val libraryArtifact = "uicomponents"
-val libraryVersion = "0.1.7"
+val libraryVersion = "0.1.8"
+group = libraryGroup
+version = libraryVersion
 
 kotlin {
     jvm()
