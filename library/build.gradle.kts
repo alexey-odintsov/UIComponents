@@ -13,7 +13,7 @@ plugins {
 
 val libraryGroup = "alexey.odintsov"
 val libraryArtifact = "uicomponents"
-val libraryVersion = "0.1.8"
+val libraryVersion = "0.1.9"
 group = libraryGroup
 version = libraryVersion
 
