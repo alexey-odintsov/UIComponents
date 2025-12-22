@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
 //    alias(libs.plugins.android.kotlin.multiplatform.library)
-    alias(libs.plugins.vanniktech.mavenPublish)
+//    alias(libs.plugins.vanniktech.mavenPublish)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
@@ -13,7 +13,7 @@ plugins {
 
 val libraryGroup = "alexey.odintsov"
 val libraryArtifact = "uicomponents"
-val libraryVersion = "0.1.6"
+val libraryVersion = "0.1.7"
 
 kotlin {
     jvm()
