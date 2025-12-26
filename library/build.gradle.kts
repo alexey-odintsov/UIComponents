@@ -11,11 +11,9 @@ plugins {
     id("maven-publish")
 }
 
-val libraryGroup = "alexey.odintsov"
+group = "alexey.odintsov"
 val libraryArtifact = "uicomponents"
-val libraryVersion = "0.1.10"
-group = libraryGroup
-version = libraryVersion
+version = "0.1.12"
 
 kotlin {
     jvm()
@@ -83,9 +81,9 @@ kotlin {
         publications {
             create<MavenPublication>("gpr") {
                 from(components["kotlin"])
-                groupId = libraryGroup
+                groupId = group.toString()
                 artifactId = libraryArtifact
-                version = libraryVersion
+                version = version.toString()
             }
         }
 
@@ -94,8 +92,8 @@ kotlin {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/alexey-odintsov/uicomponents")
                 credentials {
-                    username = findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
-                    password = findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+                    username = System.getenv("GITHUB_ACTOR") ?: findProperty("gpr.user") as String?
+                    password = System.getenv("GITHUB_TOKEN") ?: findProperty("gpr.key") as String?
                 }
             }
         }

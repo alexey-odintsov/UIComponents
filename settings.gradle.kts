@@ -33,6 +33,6 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-rootProject.name = "UIComponents"
+rootProject.name = "uicomponents"
 include(":library")
 include(":test-app")
