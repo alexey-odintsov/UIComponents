@@ -3,8 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-//    alias(libs.plugins.android.kotlin.multiplatform.library)
-//    alias(libs.plugins.vanniktech.mavenPublish)
+    alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
@@ -13,33 +12,33 @@ plugins {
 
 group = "alexey.odintsov"
 val libraryArtifact = "uicomponents"
-version = "0.1.12"
+version = "0.1.13"
 
 kotlin {
     jvm()
     withSourcesJar(publish = false)
 
-//    androidLibrary {
-//        namespace = "alexey.odintsov.kmp.uicomponents"
-//        compileSdk = libs.versions.android.compileSdk.get().toInt()
-//        minSdk = libs.versions.android.minSdk.get().toInt()
-//
-//        withJava() // enable java compilation support
-//        withHostTestBuilder {}.configure {}
-//        withDeviceTestBuilder {
-//            sourceSetTreeName = "test"
-//        }
-//
-//        compilations.configureEach {
-//            compileTaskProvider.configure {
-//                compilerOptions {
-//                    jvmTarget.set(
-//                        JvmTarget.JVM_11
-//                    )
-//                }
-//            }
-//        }
-//    }
+    androidLibrary {
+        namespace = "alexey.odintsov.kmp.uicomponents"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+
+        withJava() // enable java compilation support
+        withHostTestBuilder {}.configure {}
+        withDeviceTestBuilder {
+            sourceSetTreeName = "test"
+        }
+
+        compilations.configureEach {
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(
+                        JvmTarget.JVM_11
+                    )
+                }
+            }
+        }
+    }
 
     sourceSets {
         commonMain.dependencies {
@@ -64,41 +63,28 @@ kotlin {
     }
 }
 
-//if (!isCiBuild) {
-//    mavenPublishing {
-//        publishToMavenCentral()
-////        signAllPublications()
-//        coordinates(libraryGroup, libraryArtifact, libraryVersion)
-//
-//        pom {
-//            name = "UIComponents"
-//            description = "A library."
-//            inceptionYear = "2025"
-//        }
-//    }
-//} else {
-    publishing {
-        publications {
-            create<MavenPublication>("gpr") {
-                from(components["kotlin"])
-                groupId = group.toString()
-                artifactId = libraryArtifact
-                version = version.toString()
-            }
-        }
 
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/alexey-odintsov/uicomponents")
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR") ?: findProperty("gpr.user") as String?
-                    password = System.getenv("GITHUB_TOKEN") ?: findProperty("gpr.key") as String?
-                }
+publishing {
+    publications {
+        create<MavenPublication>("gpr") {
+            from(components["kotlin"])
+            groupId = group.toString()
+            artifactId = libraryArtifact
+            version = version.toString()
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/alexey-odintsov/uicomponents")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR") ?: findProperty("gpr.user") as String?
+                password = System.getenv("GITHUB_TOKEN") ?: findProperty("gpr.key") as String?
             }
         }
     }
-//}
+}
 
 compose.resources {
     publicResClass = true
