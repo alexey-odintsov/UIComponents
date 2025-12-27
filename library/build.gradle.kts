@@ -10,9 +10,9 @@ plugins {
     id("maven-publish")
 }
 
-group = "alexey.odintsov"
+group = "alexey.odintsov.uicomponents"
 val libraryArtifact = "uicomponents"
-version = "0.1.17"
+version = "0.1.19"
 
 kotlin {
     jvm()
