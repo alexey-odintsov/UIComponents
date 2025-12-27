@@ -12,7 +12,7 @@ plugins {
 
 group = "alexey.odintsov"
 val libraryArtifact = "uicomponents"
-version = "0.1.13"
+version = "0.1.14"
 
 kotlin {
     jvm()
@@ -65,13 +65,8 @@ kotlin {
 
 
 publishing {
-    publications {
-        create<MavenPublication>("gpr") {
-            from(components["kotlin"])
-            groupId = group.toString()
-            artifactId = libraryArtifact
-            version = version.toString()
-        }
+    publications.withType<MavenPublication>().configureEach {
+        artifactId = libraryArtifact
     }
 
     repositories {
