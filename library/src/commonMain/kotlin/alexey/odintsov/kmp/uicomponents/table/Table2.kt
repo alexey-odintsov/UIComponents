@@ -3,6 +3,7 @@ package alexey.odintsov.kmp.uicomponents.table
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -45,46 +46,45 @@ fun <T> Table2(
     rowWrapContent: @Composable (modifier: Modifier, index: Int, item: T, content: @Composable RowScope.() -> Unit) -> Unit = ::DefaultRowWrapContent,
     cellContent: @Composable (index: Int, column: ColumnInfo, T) -> Unit = ::DefaultCellContent,
 ) {
-    LazyColumn(
-        modifier = modifier.border(1.dp, DividerDefaults.color),
-        state = scrollState,
-    ) {
-        stickyHeader {
-            headerRowWrapContent(Modifier.height(IntrinsicSize.Min)) {
-                columns
-                    .filter { it.visible }
-                    .sortedBy { it.order }
-                    .forEach { column ->
-                        Box(
-                            modifier = getSizeModifier(column)
-                        ) {
-                            headerCellContent(column)
-                        }
-                        ColumnResizerDivider(
-                            modifier = Modifier.fillMaxHeight(),
-                            resizable = resizable,
-                            key = column.key,
-                            onResized = onColumnResized,
-                        )
+    Column(modifier = modifier.border(1.dp, DividerDefaults.color),) {
+        headerRowWrapContent(Modifier.height(IntrinsicSize.Min)) {
+            columns
+                .filter { it.visible }
+                .sortedBy { it.order }
+                .forEach { column ->
+                    Box(
+                        modifier = getSizeModifier(column)
+                    ) {
+                        headerCellContent(column)
                     }
-            }
-            HorizontalDivider()
+                    ColumnResizerDivider(
+                        modifier = Modifier.fillMaxHeight(),
+                        resizable = resizable,
+                        key = column.key,
+                        onResized = onColumnResized,
+                    )
+                }
         }
-        itemsIndexed(items) { i, item ->
-            rowWrapContent(Modifier.fillMaxWidth().height(IntrinsicSize.Min), i, item) {
-                columns
-                    .filter { it.visible }
-                    .sortedBy { it.order }
-                    .forEach { column ->
-                        Box(
-                            modifier = getSizeModifier(column)
-                        ) {
-                            cellContent(i, column, item)
+        HorizontalDivider()
+        LazyColumn(
+            state = scrollState,
+        ) {
+            itemsIndexed(items) { i, item ->
+                rowWrapContent(Modifier.fillMaxWidth().height(IntrinsicSize.Min), i, item) {
+                    columns
+                        .filter { it.visible }
+                        .sortedBy { it.order }
+                        .forEach { column ->
+                            Box(
+                                modifier = getSizeModifier(column)
+                            ) {
+                                cellContent(i, column, item)
+                            }
+                            VerticalDivider(Modifier.fillMaxHeight())
                         }
-                        VerticalDivider(Modifier.fillMaxHeight())
-                    }
+                }
+                HorizontalDivider()
             }
-            HorizontalDivider()
         }
     }
 }
