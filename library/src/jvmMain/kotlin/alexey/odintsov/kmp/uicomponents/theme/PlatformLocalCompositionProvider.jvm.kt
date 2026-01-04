@@ -6,7 +6,7 @@ import androidx.compose.foundation.LocalContextMenuRepresentation
 import androidx.compose.foundation.LocalScrollbarStyle
 import androidx.compose.foundation.ScrollbarStyle
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -39,8 +39,7 @@ actual fun PlatformLocalCompositionProvider(
     Surface(tonalElevation = 0.dp) { // defines bg tone from primary color and dark theme bg
         CompositionLocalProvider(
             LocalScrollbarStyle provides scrollbar,
-            // disable 48dp padding (minimumInteractiveComponentSize)
-            LocalMinimumInteractiveComponentEnforcement provides false,
+            LocalMinimumInteractiveComponentSize provides 0.dp,
             LocalContextMenuRepresentation provides contextMenuRepresentation,
             content = content
         )
