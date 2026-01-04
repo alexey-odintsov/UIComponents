@@ -3,17 +3,18 @@ package alexey.odintsov.kmp.uicomponents.testapp
 import alexey.odintsov.kmp.uicomponents.buttons.CustomButton
 import alexey.odintsov.kmp.uicomponents.buttons.CustomDropDownButton
 import alexey.odintsov.kmp.uicomponents.buttons.DropDownItem
+import alexey.odintsov.kmp.uicomponents.buttons.ImageButton
 import alexey.odintsov.kmp.uicomponents.buttons.ToggleImageButton
 import alexey.odintsov.kmp.uicomponents.checkbox.CustomCheckbox
 import alexey.odintsov.kmp.uicomponents.preview.PreviewDarkAndLightTheme
 import alexey.odintsov.kmp.uicomponents.resources.Res
 import alexey.odintsov.kmp.uicomponents.resources.icon_copy
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +22,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -30,8 +30,7 @@ fun ButtonsScreen() {
 
     Column(Modifier.padding(6.dp)) {
         Text("CustomButtons: ")
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.background(Color.Gray)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             CustomButton(onClick = {}) {
                 Text("Button")
             }
@@ -55,6 +54,12 @@ fun ButtonsScreen() {
             icon = Res.drawable.icon_copy,
             checkedState = checked,
             updateCheckedState = { c -> checked = c })
+
+        ImageButton(
+            modifier = Modifier.size(32.dp),
+            icon = Res.drawable.icon_copy,
+            title = "",
+            onClick = {})
 
         CustomCheckbox(checked = checked, onCheckedChange = { c -> checked = c })
     }
