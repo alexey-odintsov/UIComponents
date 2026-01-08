@@ -1,0 +1,79 @@
+package alexey.odintsov.uicomponents
+
+import alexey.odintsov.uicomponents.preview.PreviewDarkAndLightTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.ui.tooling.preview.Preview
+
+@Composable
+fun StatusBar(modifier: Modifier = Modifier, progress: Float, statusText: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.padding(4.dp)
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            text = statusText,
+            fontSize = MaterialTheme.typography.labelMedium.fontSize
+        )
+        if (progress > 0f) {
+            Box(Modifier.width(300.dp)) {
+                LinearProgressIndicator(
+                    progress = { progress },
+                    modifier = Modifier.height(10.dp).padding(start = 4.dp, end = 4.dp)
+                        .align(Alignment.Center),
+                    strokeCap = StrokeCap.Round,
+                    drawStopIndicator = {},
+                    gapSize = 0.dp,
+                )
+                val textColor = if (progress > 0.4f) MaterialTheme.colorScheme.onPrimary
+                else MaterialTheme.colorScheme.onSurface
+                Text(
+                    modifier = Modifier.align(Alignment.Center).padding(horizontal = 2.dp),
+                    fontSize = 9.sp,
+                    lineHeight = 10.sp,
+                    color = textColor,
+                    text = truncate(progress * 100f)
+                )
+            }
+        }
+    }
+}
+
+private fun truncate(number: Float): String {
+    return ((number * 100).toInt() / 100f).toString()
+}
+
+@Preview
+@Composable
+private fun PreviewStatusBarInProgress() {
+    val modifier = Modifier
+    val text = "/user/test/file.dlt"
+
+    PreviewDarkAndLightTheme(true) {
+        Column {
+            StatusBar(modifier, 0f, text)
+            StatusBar(modifier, 0.15f, text)
+            StatusBar(modifier, 0.45f, text)
+            StatusBar(modifier, 0.5f, text)
+            StatusBar(modifier, 0.6f, text)
+            StatusBar(Modifier, 1f, text)
+        }
+    }
+}
