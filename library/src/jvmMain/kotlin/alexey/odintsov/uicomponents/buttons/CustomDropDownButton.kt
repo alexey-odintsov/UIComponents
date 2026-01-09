@@ -41,7 +41,10 @@ fun CustomDropDownButton(
     CustomButton(
         modifier = modifier,
         contentPadding = PaddingValues(start = 8.dp, top = 2.dp, bottom = 2.dp, end = 2.dp),
-        onClick = items.first().clickHandler
+        onClick = {
+            expanded = false
+            items.first().clickHandler
+        }
     ) {
         Row {
             Text(text = items.first().title)
@@ -71,7 +74,10 @@ fun CustomDropDownButton(
             items.forEach { item ->
                 DropdownMenuItem(
                     modifier = Modifier.height(24.dp),
-                    onClick = item.clickHandler,
+                    onClick = {
+                        expanded = false
+                        item.clickHandler
+                    },
                     text = { Text(item.title) }
                 )
             }
