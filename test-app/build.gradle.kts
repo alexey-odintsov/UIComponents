@@ -34,7 +34,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "alexey.odintsov.kmp.uicomponents.testapp.MainKt"
+        mainClass = "alexey.odintsov.uicomponents.testapp.MainKt"
     }
 }
 

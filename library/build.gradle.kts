@@ -19,7 +19,7 @@ kotlin {
     withSourcesJar(publish = false)
 
     androidLibrary {
-        namespace = "alexey.odintsov.kmp.uicomponents"
+        namespace = "alexey.odintsov.uicomponents"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
@@ -79,5 +79,5 @@ publishing {
 
 compose.resources {
     publicResClass = true
-    packageOfResClass = "alexey.odintsov.kmp.uicomponents.resources"
+    packageOfResClass = "alexey.odintsov.uicomponents.resources"
 }
