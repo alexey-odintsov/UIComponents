@@ -1,14 +1,11 @@
 package alexey.odintsov.uicomponents.table
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -18,15 +15,12 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -34,7 +28,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
  * Renders table with resizable columns.
  */
 @Composable
-fun <T> Table2(
+fun <T> LazyTable(
     modifier: Modifier = Modifier,
     items: SnapshotStateList<T>,
     scrollState: LazyListState = rememberLazyListState(),
@@ -46,7 +40,7 @@ fun <T> Table2(
     rowWrapContent: @Composable (modifier: Modifier, index: Int, item: T, content: @Composable RowScope.() -> Unit) -> Unit = ::DefaultRowWrapContent,
     cellContent: @Composable (index: Int, column: ColumnInfo, T) -> Unit = ::DefaultCellContent,
 ) {
-    Column(modifier = modifier.border(1.dp, DividerDefaults.color),) {
+    Column(modifier = modifier.border(1.dp, DividerDefaults.color)) {
         headerRowWrapContent(Modifier.height(IntrinsicSize.Min)) {
             columns
                 .filter { it.visible }
@@ -89,47 +83,6 @@ fun <T> Table2(
     }
 }
 
-@Composable
-fun <T> DefaultCellContent(index: Int, column: ColumnInfo, item: T) {
-    Text(
-        modifier = Modifier.fillMaxSize(),
-        text = item.toString(),
-        textAlign = mapAlign(column)
-    )
-}
-
-@Composable
-fun DefaultHeaderCellContent(column: ColumnInfo) {
-    Text(
-        modifier = Modifier.fillMaxSize(),
-        text = column.title,
-        style = MaterialTheme.typography.titleSmall,
-        textAlign = mapAlign(column)
-    )
-}
-
-@Composable
-fun DefaultHeaderRowWrapContent(modifier: Modifier, content: @Composable RowScope.() -> Unit) {
-    Row(
-        modifier.background(MaterialTheme.colorScheme.surfaceBright).fillMaxWidth()
-    ) {
-        content()
-    }
-}
-
-@Composable
-fun <T> DefaultRowWrapContent(
-    modifier: Modifier,
-    index: Int,
-    item: T,
-    content: @Composable RowScope.() -> Unit
-) {
-    Row(
-        modifier.background(MaterialTheme.colorScheme.surfaceBright).fillMaxWidth()
-    ) {
-        content()
-    }
-}
 
 private fun RowScope.getSizeModifier(column: ColumnInfo): Modifier {
     return when {
@@ -139,15 +92,20 @@ private fun RowScope.getSizeModifier(column: ColumnInfo): Modifier {
     }
 }
 
-fun mapAlign(c: ColumnInfo): TextAlign = when (c.align) {
-    ColumnAlign.Left -> TextAlign.Left
-    ColumnAlign.Center -> TextAlign.Center
-    ColumnAlign.Right -> TextAlign.Right
-}
 
 @Preview
 @Composable
-private fun PreviewTable2() {
+private fun PreviewLazyTable() {
+    data class LogItem(
+        val key: Int,
+        val data: Map<String, String>,
+    )
+
+    data class MessageOffset(
+        val id: Int,
+        val offset: Long,
+    )
+
     val columns = mutableStateListOf(
         ColumnInfo(
             key = "timestamp",
@@ -188,7 +146,9 @@ private fun PreviewTable2() {
     )
     val tags = listOf("System", "Monitoring", "App")
     val levels = listOf("V", "D", "W", "E", "F")
-    val items = (1..100).map {
+    val indicesMap = mutableStateMapOf<Int, LogItem>()
+    val items = mutableStateListOf<MessageOffset>()
+    repeat(100) { i ->
         val message = ('A'..'z').map { it }.shuffled().subList(0, 40).joinToString("")
         val values = hashMapOf<String, String>(
             columns[0].key to System.currentTimeMillis().toString(),
@@ -196,16 +156,12 @@ private fun PreviewTable2() {
             columns[2].key to levels.random(),
             columns[3].key to message,
         )
-        LogItem(message, values)
-    }.toMutableStateList()
+        val offset = MessageOffset(i, i * 10 + 100L)
+        indicesMap[i] = LogItem(i, values)
+    }
 
-    Table2(
+    LazyTable<MessageOffset>(
         items = items,
         columns = columns,
     )
 }
-
-private data class LogItem(
-    val key: String,
-    val data: Map<String, String>,
-)

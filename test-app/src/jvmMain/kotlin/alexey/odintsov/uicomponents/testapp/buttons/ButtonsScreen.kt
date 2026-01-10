@@ -1,4 +1,4 @@
-package alexey.odintsov.uicomponents.testapp
+package alexey.odintsov.uicomponents.testapp.buttons
 
 import alexey.odintsov.uicomponents.buttons.CustomButton
 import alexey.odintsov.uicomponents.buttons.CustomDropDownButton

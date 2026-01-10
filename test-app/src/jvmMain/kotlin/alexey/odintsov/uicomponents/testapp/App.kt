@@ -2,6 +2,11 @@ package alexey.odintsov.uicomponents.testapp
 
 import alexey.odintsov.uicomponents.StatusBar
 import alexey.odintsov.uicomponents.tabs.TabsPanel
+import alexey.odintsov.uicomponents.testapp.buttons.ButtonsScreen
+import alexey.odintsov.uicomponents.testapp.dilogs.DialogsScreen
+import alexey.odintsov.uicomponents.testapp.edit.EditScreen
+import alexey.odintsov.uicomponents.testapp.table.LazyTableScreen
+import alexey.odintsov.uicomponents.testapp.table.TableScreen
 import alexey.odintsov.uicomponents.theme.ThemeManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +30,7 @@ fun App() {
     ThemeManager.AppTheme {
         var tabIndex by remember { mutableStateOf(1) }
         val tabs = remember {
-            listOf("Buttons", "Table", "Edit", "Dialogs").toMutableStateList()
+            listOf("Buttons", "Table", "LazyTable", "Edit", "Dialogs").toMutableStateList()
         }
 
         Column(
@@ -44,8 +49,9 @@ fun App() {
                 when (tabIndex) {
                     0 -> ButtonsScreen()
                     1 -> TableScreen()
-                    2 -> EditScreen()
-                    3 -> DialogsScreen()
+                    2 -> LazyTableScreen()
+                    3 -> EditScreen()
+                    4 -> DialogsScreen()
                 }
             }
             StatusBar(progress = 0.5f, statusText = "Loading")

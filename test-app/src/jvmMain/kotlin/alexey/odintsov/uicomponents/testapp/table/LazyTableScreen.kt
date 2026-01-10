@@ -1,8 +1,8 @@
-package alexey.odintsov.uicomponents.testapp
+package alexey.odintsov.uicomponents.testapp.table
 
 import alexey.odintsov.uicomponents.buttons.CustomButton
-import alexey.odintsov.uicomponents.edit.CustomEditText
 import alexey.odintsov.uicomponents.preview.PreviewDarkAndLightTheme
+import alexey.odintsov.uicomponents.table.DesktopLazyTable
 import alexey.odintsov.uicomponents.table.DesktopTable
 import alexey.odintsov.uicomponents.table.mapAlign
 import androidx.compose.desktop.ui.tooling.preview.Preview
@@ -46,32 +46,19 @@ data class LogItem(
 )
 
 @Composable
-fun TableScreen() {
-    val viewModel: TableScreenViewModel = viewModel {
-        TableScreenViewModel()
+fun LazyTableScreen() {
+    val viewModel: LazyTableScreenViewModel = viewModel {
+        LazyTableScreenViewModel()
     }
-    val columns = viewModel.columns
     val items = viewModel.items
     val onColumnResized = viewModel::onColumnResized
     val scrollState = remember { LazyListState() }
     val scrollState2 = remember { LazyListState() }
     val horizontalScrollState = rememberScrollState(1)
-    var colorValue by remember { mutableStateOf(0) }
     var wrapContent by remember { mutableStateOf(false) }
-    val colors = viewModel.colors
     val focusManager = LocalFocusManager.current
 
     Column(Modifier.padding(32.dp)) {
-        Row {
-            CustomEditText(colorValue.toString(), onValueChange = {
-                colorValue = it.toIntOrNull() ?: 0
-            })
-            CustomButton(onClick = {
-                viewModel.changeColor(colorValue, Color.Red)
-            }) {
-                Text("Change color")
-            }
-        }
         CustomButton(onClick = { wrapContent = !wrapContent }) {
             Text("Wrap content: $wrapContent")
         }
@@ -80,7 +67,7 @@ fun TableScreen() {
             Box(Modifier.weight(0.5f)) {
                 Column {
                     Text("DesktopTable (default)")
-                    DesktopTable(
+                    DesktopLazyTable(
                         items = viewModel.items,
                         columns = columns,
                         scrollState = scrollState2,
@@ -125,7 +112,10 @@ fun TableScreen() {
                             }
                         },
                         headerRowWrapContent = { modifier, content ->
-                            Row(modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceBright)) {
+                            Row(
+                                modifier.fillMaxSize()
+                                    .background(MaterialTheme.colorScheme.surfaceBright)
+                            ) {
                                 content()
                             }
                         },
@@ -136,8 +126,7 @@ fun TableScreen() {
                             )
                             ContextMenuArea(items = { menuItems }) {
                                 val color =
-                                    if (viewModel.selectedRowIndex.value == i) Color.Gray else (colors[i]
-                                        ?: MaterialTheme.colorScheme.surfaceBright)
+                                    if (viewModel.selectedRowIndex.value == i) Color.Gray else MaterialTheme.colorScheme.surfaceBright
                                 Row(
                                     modifier
                                         .background(color)
@@ -193,6 +182,6 @@ fun TableScreen() {
 @Composable
 private fun PreviewTableScreen() {
     PreviewDarkAndLightTheme(true) {
-        TableScreen()
+        LazyTableScreen()
     }
 }

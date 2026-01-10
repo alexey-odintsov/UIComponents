@@ -1,4 +1,4 @@
-package alexey.odintsov.uicomponents.testapp
+package alexey.odintsov.uicomponents.testapp.edit
 
 import alexey.odintsov.uicomponents.CustomDropDown
 import alexey.odintsov.uicomponents.edit.AutoCompleteEditText
