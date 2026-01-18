@@ -31,7 +31,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun <T> LazyTable(
     modifier: Modifier = Modifier,
     items: SnapshotStateList<T>,
-    scrollState: LazyListState = rememberLazyListState(),
+    listState: LazyListState,
     columns: SnapshotStateList<ColumnInfo>,
     resizable: Boolean = true,
     onColumnResized: (key: String, size: Float) -> Unit = { _, _ -> },
@@ -60,9 +60,7 @@ fun <T> LazyTable(
                 }
         }
         HorizontalDivider()
-        LazyColumn(
-            state = scrollState,
-        ) {
+        LazyColumn(state = listState) {
             itemsIndexed(items) { i, item ->
                 rowWrapContent(Modifier.fillMaxWidth().height(IntrinsicSize.Min), i, item) {
                     columns
@@ -163,5 +161,6 @@ private fun PreviewLazyTable() {
     LazyTable<MessageOffset>(
         items = items,
         columns = columns,
+        listState = rememberLazyListState()
     )
 }

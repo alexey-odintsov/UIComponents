@@ -12,7 +12,7 @@ class TableScreenViewModel : ViewModel() {
     val selectedRowIndex = mutableStateOf<Int?>(null)
     val colors = mutableStateMapOf<Int, Color>()
 
-    val items = (1..100).map {
+    val items = (1..100).map { i ->
         val message = ('A'..'z').map { it }.shuffled().subList(0, 40).joinToString("")
         val values = hashMapOf<String, String>(
             columns[0].key to System.currentTimeMillis().toString(),
@@ -20,7 +20,7 @@ class TableScreenViewModel : ViewModel() {
             columns[2].key to levels.random(),
             columns[3].key to message,
         )
-        LogItem(message, values)
+        LogItem(i, values)
     }.toMutableStateList()
 
     fun changeColor(index: Int, color: Color) {

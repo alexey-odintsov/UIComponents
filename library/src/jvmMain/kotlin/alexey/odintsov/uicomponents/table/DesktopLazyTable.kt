@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +25,7 @@ import androidx.compose.ui.unit.dp
 fun <T> DesktopLazyTable(
     modifier: Modifier = Modifier,
     items: SnapshotStateList<T>,
-    scrollState: LazyListState = rememberLazyListState(),
+    listState: LazyListState = rememberLazyListState(),
     horizontalScrollState: ScrollState,
     wrapContent: Boolean = true,
     maxWidth: Dp = 3000.dp,
@@ -35,7 +36,14 @@ fun <T> DesktopLazyTable(
     headerCellContent: @Composable (column: ColumnInfo) -> Unit = ::DefaultHeaderCellContent,
     rowWrapContent: @Composable (modifier: Modifier, index: Int, item: T, content: @Composable RowScope.() -> Unit) -> Unit = ::DefaultRowWrapContent,
     cellContent: @Composable (index: Int, column: ColumnInfo, T) -> Unit = ::DefaultCellContent,
+    requestLoadMessagesInRange: (Int, Int) -> Unit,
 ) {
+    LaunchedEffect(listState.firstVisibleItemIndex, listState.layoutInfo.visibleItemsInfo.size) {
+        val firstVisible = listState.firstVisibleItemIndex
+        val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: firstVisible
+        requestLoadMessagesInRange(firstVisible, lastVisible)
+    }
+
     Box(modifier) {
         LazyTable(
             modifier = if (wrapContent) {
@@ -46,7 +54,7 @@ fun <T> DesktopLazyTable(
             items = items,
             columns = columns,
             resizable = resizable,
-            scrollState = scrollState,
+            listState = listState,
             onColumnResized = onColumnResized,
             headerRowWrapContent = headerRowWrapContent,
             headerCellContent = headerCellContent,
@@ -55,7 +63,7 @@ fun <T> DesktopLazyTable(
         )
         VerticalScrollbar(
             modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-            adapter = rememberScrollbarAdapter(scrollState = scrollState)
+            adapter = rememberScrollbarAdapter(scrollState = listState)
         )
         if (!wrapContent) {
             HorizontalScrollbar(

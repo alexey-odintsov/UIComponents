@@ -28,7 +28,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
     ThemeManager.AppTheme {
-        var tabIndex by remember { mutableStateOf(1) }
+        var tabIndex by remember { mutableStateOf(2) }
         val tabs = remember {
             listOf("Buttons", "Table", "LazyTable", "Edit", "Dialogs").toMutableStateList()
         }
