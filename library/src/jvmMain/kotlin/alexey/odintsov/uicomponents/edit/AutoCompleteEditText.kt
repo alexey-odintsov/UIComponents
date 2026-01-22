@@ -1,9 +1,12 @@
 package alexey.odintsov.uicomponents.edit
 
+import alexey.odintsov.uicomponents.preview.PreviewDarkAndLightTheme
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -24,6 +28,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,6 +42,9 @@ fun AutoCompleteEditText(
     singleLine: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     items: SnapshotStateList<String>,
+    isError: Boolean = false,
+    label: @Composable (() -> Unit)? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     onEnterClicked: () -> Unit
 ) {
 
@@ -57,9 +65,11 @@ fun AutoCompleteEditText(
                             onEnterClicked()
                             true
                         }
+
                         Key.Enter -> {
                             true
                         }
+
                         else -> {
                             false
                         }
@@ -69,6 +79,9 @@ fun AutoCompleteEditText(
             minLines = 1,
             maxLines = 1,
             interactionSource = interactionSource,
+            isError = isError,
+            label = label,
+            visualTransformation = visualTransformation,
         )
 
         val filteringOptions = items.filter { it.contains(value, ignoreCase = true) }
@@ -103,6 +116,36 @@ fun AutoCompleteEditText(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun PreviewAutoCompleteEditText() {
+    val value = remember { mutableStateOf("Text") }
+    PreviewDarkAndLightTheme(true) {
+        Column {
+            AutoCompleteEditText(
+                value = value.value,
+                onValueChange = { v ->
+                    value.value = v
+                },
+                onEnterClicked = {},
+                isError = true,
+                visualTransformation = HighlightTransformation(4, MaterialTheme.colorScheme.onError),
+                items = mutableStateListOf("test", "abc", "def"),
+            )
+            AutoCompleteEditText(
+                value = value.value,
+                onValueChange = { v ->
+                    value.value = v
+                },
+                onEnterClicked = {},
+                isError = false,
+                visualTransformation = HighlightTransformation(4, MaterialTheme.colorScheme.onError),
+                items = mutableStateListOf("test", "abc", "def"),
+            )
         }
     }
 }
