@@ -12,7 +12,7 @@ plugins {
 
 group = "alexey.odintsov.uicomponents"
 val libraryArtifact = "uicomponents"
-version = "0.3.0-dev"
+version = "0.2.8-dev1"
 
 kotlin {
     jvm()

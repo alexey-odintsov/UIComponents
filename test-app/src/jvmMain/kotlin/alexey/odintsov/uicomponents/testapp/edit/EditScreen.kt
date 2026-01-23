@@ -3,11 +3,13 @@ package alexey.odintsov.uicomponents.testapp.edit
 import alexey.odintsov.uicomponents.CustomDropDown
 import alexey.odintsov.uicomponents.edit.AutoCompleteEditText
 import alexey.odintsov.uicomponents.edit.CustomEditText
+import alexey.odintsov.uicomponents.edit.HighlightTransformation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,6 +45,7 @@ fun EditScreen() {
                 },
                 onEnterClicked = {},
                 items = mutableStateListOf("test", "abc", "def"),
+                visualTransformation = HighlightTransformation(3, MaterialTheme.colorScheme.error)
             )
         }
 
