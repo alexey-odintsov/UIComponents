@@ -16,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -24,7 +23,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TabsPanel(
     tabIndex: Int,
-    tabs: SnapshotStateList<String>,
+    tabs: List<String>,
     callback: (Int) -> Unit,
     vertical: Boolean = false,
 ) {

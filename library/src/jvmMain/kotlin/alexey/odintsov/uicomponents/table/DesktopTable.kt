@@ -1,11 +1,5 @@
 package alexey.odintsov.uicomponents.table
 
-import alexey.odintsov.uicomponents.table.ColumnInfo
-import alexey.odintsov.uicomponents.table.DefaultCellContent
-import alexey.odintsov.uicomponents.table.DefaultHeaderCellContent
-import alexey.odintsov.uicomponents.table.DefaultHeaderRowWrapContent
-import alexey.odintsov.uicomponents.table.DefaultRowWrapContent
-import alexey.odintsov.uicomponents.table.Table2
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.VerticalScrollbar
@@ -19,22 +13,20 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 
 
 @Composable
 fun <T> DesktopTable(
     modifier: Modifier = Modifier,
-    items: SnapshotStateList<T>,
+    items: List<T>,
     scrollState: LazyListState = rememberLazyListState(),
     horizontalScrollState: ScrollState,
     wrapContent: Boolean = true,
-    maxWidth: Dp = 3000.dp,
-    columns: SnapshotStateList<ColumnInfo>,
+    maxWidth: Dp? = null,
+    columns: List<ColumnInfo>,
     resizable: Boolean = true,
     onColumnResized: (key: String, size: Float) -> Unit = { _, _ -> },
     headerRowWrapContent: @Composable (modifier: Modifier, content: @Composable RowScope.() -> Unit) -> Unit = ::DefaultHeaderRowWrapContent,
@@ -46,8 +38,10 @@ fun <T> DesktopTable(
         Table2(
             modifier = if (wrapContent) {
                 Modifier.fillMaxHeight()
-            } else {
+            } else if (maxWidth != null) {
                 Modifier.fillMaxHeight().horizontalScroll(horizontalScrollState).width(maxWidth)
+            } else {
+                Modifier.fillMaxHeight()
             },
             items = items,
             columns = columns,

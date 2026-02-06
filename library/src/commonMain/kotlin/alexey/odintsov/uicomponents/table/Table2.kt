@@ -23,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -36,9 +35,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun <T> Table2(
     modifier: Modifier = Modifier,
-    items: SnapshotStateList<T>,
+    items: List<T>,
     scrollState: LazyListState = rememberLazyListState(),
-    columns: SnapshotStateList<ColumnInfo>,
+    columns: List<ColumnInfo>,
     resizable: Boolean = true,
     onColumnResized: (key: String, size: Float) -> Unit = { _, _ -> },
     headerRowWrapContent: @Composable (modifier: Modifier, content: @Composable RowScope.() -> Unit) -> Unit = ::DefaultHeaderRowWrapContent,

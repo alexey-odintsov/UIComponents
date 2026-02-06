@@ -19,7 +19,6 @@ import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
@@ -76,14 +75,14 @@ class TableRowBuilder() {
 
 @Composable
 fun <T> Table(
-    items: SnapshotStateList<T>,
+    items: List<T>,
     modifier: Modifier = Modifier,
     scrollState: LazyListState,
     rowModifier: Modifier = Modifier,
     resizable: Boolean = true,
     selectedRow: Int?,
     onRowSelected: (Int) -> Unit,
-    columns: SnapshotStateList<ColumnInfo>,
+    columns: List<ColumnInfo>,
     onColumnResized: (String, Float) -> Unit,
     header: @Composable TableRowBuilder.() -> Unit,
     headerWrapper: @Composable (content: @Composable () -> Unit) -> Unit = { content -> content() },
