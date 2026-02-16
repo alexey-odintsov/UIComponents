@@ -1,10 +1,11 @@
 package alexey.odintsov.uicomponents.table
 
+import alexey.odintsov.uicomponents.PointerIconType
+import alexey.odintsov.uicomponents.provideIcon
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.input.pointer.pointerInput
 
@@ -17,7 +18,7 @@ fun ColumnResizerDivider(
 ) {
     val finalModifier = if (resizable) {
         modifier
-            .pointerHoverIcon(PointerIcon.Crosshair)
+            .pointerHoverIcon(provideIcon(PointerIconType.Resize))
             .pointerInput("divider-$key") {
                 detectDragGestures { change, dragAmount ->
                     change.consume()
