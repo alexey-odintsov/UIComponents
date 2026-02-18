@@ -3,7 +3,6 @@ package alexey.odintsov.uicomponents.buttons
 import alexey.odintsov.uicomponents.preview.PreviewDarkAndLightTheme
 import alexey.odintsov.uicomponents.resources.Res
 import alexey.odintsov.uicomponents.resources.icon_dropdown_arrow_down
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 data class DropDownItem(
@@ -43,7 +43,7 @@ fun CustomDropDownButton(
         contentPadding = PaddingValues(start = 8.dp, top = 2.dp, bottom = 2.dp, end = 2.dp),
         onClick = {
             expanded = false
-            items.first().clickHandler
+            items.first().clickHandler()
         }
     ) {
         Row {
@@ -76,7 +76,7 @@ fun CustomDropDownButton(
                     modifier = Modifier.height(24.dp),
                     onClick = {
                         expanded = false
-                        item.clickHandler
+                        item.clickHandler()
                     },
                     text = { Text(item.title) }
                 )
