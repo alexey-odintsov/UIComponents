@@ -9,7 +9,6 @@ import alexey.odintsov.uicomponents.checkbox.CustomCheckbox
 import alexey.odintsov.uicomponents.preview.PreviewDarkAndLightTheme
 import alexey.odintsov.uicomponents.resources.Res
 import alexey.odintsov.uicomponents.resources.icon_copy
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -43,9 +43,9 @@ fun ButtonsScreen() {
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             CustomDropDownButton(
                 items = listOf(
-                    DropDownItem(title = "A", clickHandler = {}),
-                    DropDownItem(title = "B", clickHandler = {}),
-                    DropDownItem(title = "C", clickHandler = {}),
+                    DropDownItem(title = "A", clickHandler = { println("A clicked") }),
+                    DropDownItem(title = "B", clickHandler = { println("B clicked") }),
+                    DropDownItem(title = "C", clickHandler = { println("C clicked") }),
                 )
             )
         }
