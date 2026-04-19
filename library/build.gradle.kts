@@ -7,19 +7,19 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
-    id("maven-publish")
+    alias(libs.plugins.vanniktech.mavenPublish)
 }
 
-group = "alexey.odintsov.uicomponents"
-val libraryArtifact = "uicomponents"
-version = "0.2.10"
+group = "io.github.alexey-odintsov"
+val artifact = "uicomponents"
+version = "0.0.1"
 
 kotlin {
     jvm()
     withSourcesJar(publish = false)
 
     androidLibrary {
-        namespace = "alexey.odintsov.uicomponents"
+        namespace = "io.github.alexey-odintsov.uicomponents"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
@@ -33,7 +33,7 @@ kotlin {
             compileTaskProvider.configure {
                 compilerOptions {
                     jvmTarget.set(
-                        JvmTarget.JVM_11
+                        JvmTarget.JVM_17
                     )
                 }
             }
@@ -42,12 +42,12 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.components.resources)
+            implementation(libs.material.icons.extended)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
@@ -63,16 +63,34 @@ kotlin {
     }
 }
 
+mavenPublishing {
+    publishToMavenCentral()
 
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/alexey-odintsov/uicomponents")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR") ?: findProperty("gpr.user") as String?
-                password = System.getenv("GITHUB_TOKEN") ?: findProperty("gpr.key") as String?
+    signAllPublications()
+
+    coordinates(group.toString(), artifact, version.toString())
+
+    pom {
+        name = "KMP UI components library"
+        description = "UI components library."
+        inceptionYear = "2025"
+        url = "https://github.com/alexey-odintsov/UIComponents"
+        licenses {
+            license {
+                name = "MIT License"
             }
+        }
+        developers {
+            developer {
+                id = "alexey-odintsov"
+                name = "Alexey Odintsov"
+                url = "https://github.com/alexey-odintsov/"
+            }
+        }
+        scm {
+            url = "https://github.com/alexey-odintsov/UIComponents"
+            connection = "scm:git:git://github.com/alexey-odintsov/UIComponents.git"
+            developerConnection = "scm:git:ssh://git@github.com/alexey-odintsov/UIComponents.git"
         }
     }
 }
