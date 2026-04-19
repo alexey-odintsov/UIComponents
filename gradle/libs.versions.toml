@@ -6,7 +6,7 @@ junit = "4.13.2"
 kotlin = "2.2.20"
 kotlinx-coroutines = "1.10.2"
 agp = "8.13.0"
-vanniktechMavenPublish = "0.34.0"
+vanniktechMavenPublish = "0.36.0"
 android-minSdk = "24"
 android-compileSdk = "36"
 

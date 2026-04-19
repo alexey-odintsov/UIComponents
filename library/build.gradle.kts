@@ -7,11 +7,12 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.vanniktech.mavenPublish)
     id("maven-publish")
 }
 
-group = "alexey.odintsov.uicomponents"
-val libraryArtifact = "uicomponents"
+group = "io.github.alexey-odintsov"
+val artifact = "uicomponents"
 version = "0.2.10"
 
 kotlin {
@@ -19,7 +20,7 @@ kotlin {
     withSourcesJar(publish = false)
 
     androidLibrary {
-        namespace = "alexey.odintsov.uicomponents"
+        namespace = "io.github.alexey-odintsov.uicomponents"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
@@ -63,6 +64,37 @@ kotlin {
     }
 }
 
+mavenPublishing {
+    publishToMavenCentral()
+
+    signAllPublications()
+
+    coordinates(group.toString(), artifact, version.toString())
+
+    pom {
+        name = "KMP UI components library"
+        description = "UI components library."
+        inceptionYear = "2025"
+        url = "https://github.com/alexey-odintsov/UIComponents"
+        licenses {
+            license {
+                name = "MIT License"
+            }
+        }
+        developers {
+            developer {
+                id = "alexey-odintsov"
+                name = "Alexey Odintsov"
+                url = "https://github.com/alexey-odintsov/"
+            }
+        }
+        scm {
+            url = "https://github.com/alexey-odintsov/UIComponents"
+            connection = "scm:git:git://github.com/alexey-odintsov/UIComponents.git"
+            developerConnection = "scm:git:ssh://git@github.com/alexey-odintsov/UIComponents.git"
+        }
+    }
+}
 
 publishing {
     repositories {
