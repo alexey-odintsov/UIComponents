@@ -8,12 +8,11 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.vanniktech.mavenPublish)
-    id("maven-publish")
 }
 
 group = "io.github.alexey-odintsov"
 val artifact = "uicomponents"
-version = "0.2.10"
+version = "0.0.1"
 
 kotlin {
     jvm()
@@ -34,7 +33,7 @@ kotlin {
             compileTaskProvider.configure {
                 compilerOptions {
                     jvmTarget.set(
-                        JvmTarget.JVM_11
+                        JvmTarget.JVM_17
                     )
                 }
             }
@@ -43,12 +42,12 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.components.resources)
+            implementation(libs.material.icons.extended)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
@@ -92,19 +91,6 @@ mavenPublishing {
             url = "https://github.com/alexey-odintsov/UIComponents"
             connection = "scm:git:git://github.com/alexey-odintsov/UIComponents.git"
             developerConnection = "scm:git:ssh://git@github.com/alexey-odintsov/UIComponents.git"
-        }
-    }
-}
-
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/alexey-odintsov/uicomponents")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR") ?: findProperty("gpr.user") as String?
-                password = System.getenv("GITHUB_TOKEN") ?: findProperty("gpr.key") as String?
-            }
         }
     }
 }
