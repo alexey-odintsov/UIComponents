@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,9 +29,13 @@ fun TablePreview() {
     val scrollState = rememberLazyListState()
     var selectedRow by remember { mutableStateOf<Int?>(null) }
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
-            Text("Table Preview", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(bottom = 16.dp))
+    ComponentPreviewWrapper(title = "Table Preview") {
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+            Text(
+                "Standard Table",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
             Table(
                 items = items,
                 modifier = Modifier.fillMaxWidth().weight(1f),

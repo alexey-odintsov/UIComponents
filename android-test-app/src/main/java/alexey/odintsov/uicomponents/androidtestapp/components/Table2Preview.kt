@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -24,9 +23,13 @@ fun Table2Preview() {
     }
     val items = listOf("Element A", "Element B", "Element C")
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
-            Text("Table2 Preview", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(bottom = 16.dp))
+    ComponentPreviewWrapper(title = "Table2 Preview") {
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+            Text(
+                "Resizable Table (Table2)",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
             Table2(
                 modifier = Modifier.fillMaxWidth().weight(1f),
                 items = items,
