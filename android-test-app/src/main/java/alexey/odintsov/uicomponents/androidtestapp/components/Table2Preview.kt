@@ -1,8 +1,8 @@
 package alexey.odintsov.uicomponents.androidtestapp.components
 
-import alexey.odintsov.uicomponents.androidtestapp.ui.theme.UicomponentsTheme
 import alexey.odintsov.uicomponents.table.ColumnInfo
 import alexey.odintsov.uicomponents.table.Table2
+import alexey.odintsov.uicomponents.theme.ThemeManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,7 +44,7 @@ fun Table2Preview() {
 @Preview(showBackground = true)
 @Composable
 private fun PreviewTable2Preview() {
-    UicomponentsTheme {
+    ThemeManager.AppTheme {
         Table2Preview()
     }
 }

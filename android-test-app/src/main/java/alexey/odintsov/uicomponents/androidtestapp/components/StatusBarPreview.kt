@@ -1,7 +1,7 @@
 package alexey.odintsov.uicomponents.androidtestapp.components
 
 import alexey.odintsov.uicomponents.StatusBar
-import alexey.odintsov.uicomponents.androidtestapp.ui.theme.UicomponentsTheme
+import alexey.odintsov.uicomponents.theme.ThemeManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -31,7 +31,7 @@ fun StatusBarPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun PreviewStatusBarPreview() {
-    UicomponentsTheme {
+    ThemeManager.AppTheme {
         StatusBarPreview()
     }
 }
