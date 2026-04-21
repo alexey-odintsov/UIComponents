@@ -1,5 +1,6 @@
 package alexey.odintsov.uicomponents.androidtestapp.components
 
+import alexey.odintsov.uicomponents.androidtestapp.ui.theme.UicomponentsTheme
 import alexey.odintsov.uicomponents.table.ColumnInfo
 import alexey.odintsov.uicomponents.table.Table
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -54,5 +56,13 @@ fun TablePreview() {
                 cell(columns[1]) { Text(item) }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewTablePreview() {
+    UicomponentsTheme {
+        TablePreview()
     }
 }
