@@ -1,5 +1,9 @@
 package alexey.odintsov.uicomponents.androidtestapp
 
+import alexey.odintsov.uicomponents.androidtestapp.components.StatusBarPreview
+import alexey.odintsov.uicomponents.androidtestapp.components.Table2Preview
+import alexey.odintsov.uicomponents.androidtestapp.components.TablePreview
+import alexey.odintsov.uicomponents.theme.ThemeManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,10 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import alexey.odintsov.uicomponents.theme.ThemeManager
-import alexey.odintsov.uicomponents.androidtestapp.components.StatusBarPreview
-import alexey.odintsov.uicomponents.androidtestapp.components.Table2Preview
-import alexey.odintsov.uicomponents.androidtestapp.components.TablePreview
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +38,12 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+enum class Screen(val title: String, val route: String) {
+    StatusBar("StatusBar", "statusBar"),
+    Table("Table (Standard)", "table"),
+    Table2("Table2 (Resizable)", "table2")
+}
+
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
@@ -45,33 +51,29 @@ fun MainScreen() {
         composable("menu") {
             MenuScreen(onNavigate = { route -> navController.navigate(route) })
         }
-        composable("statusBar") {
-            StatusBarPreview()
-        }
-        composable("table") {
-            TablePreview()
-        }
-        composable("table2") {
-            Table2Preview()
+        Screen.entries.forEach { screen ->
+            composable(screen.route) {
+                when (screen) {
+                    Screen.StatusBar -> StatusBarPreview()
+                    Screen.Table -> TablePreview()
+                    Screen.Table2 -> Table2Preview()
+                }
+            }
         }
     }
 }
 
 @Composable
 fun MenuScreen(onNavigate: (String) -> Unit) {
-    val items = listOf(
-        "StatusBar" to "statusBar",
-        "Table (Standard)" to "table",
-        "Table2 (Resizable)" to "table2"
-    )
+    val items = Screen.entries
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
             items(items) { item ->
                 Text(
-                    text = item.first,
+                    text = item.title,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { onNavigate(item.second) }
+                        .clickable { onNavigate(item.route) }
                         .padding(16.dp),
                     style = MaterialTheme.typography.bodyLarge
                 )
