@@ -19,7 +19,7 @@ kotlin {
     withSourcesJar(publish = false)
 
     androidLibrary {
-        namespace = "io.github.alexey-odintsov.uicomponents"
+        namespace = "io.github.alexey_odintsov.uicomponents"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
@@ -48,7 +48,7 @@ kotlin {
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
             implementation(libs.material.icons.extended)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.jetbrains.compose.ui.tooling.preview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.kotlin.datetime)
