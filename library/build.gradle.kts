@@ -12,7 +12,7 @@ plugins {
 
 group = "io.github.alexey-odintsov"
 val artifact = "uicomponents"
-version = "0.0.2"
+version = "0.0.3"
 
 kotlin {
     jvm()
@@ -33,7 +33,7 @@ kotlin {
             compileTaskProvider.configure {
                 compilerOptions {
                     jvmTarget.set(
-                        JvmTarget.JVM_17
+                        JvmTarget.JVM_21
                     )
                 }
             }
@@ -49,16 +49,7 @@ kotlin {
             implementation(libs.compose.components.resources)
             implementation(libs.material.icons.extended)
             implementation(libs.jetbrains.compose.ui.tooling.preview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.kotlin.datetime)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
-        jvmMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutinesSwing)
         }
     }
 }
