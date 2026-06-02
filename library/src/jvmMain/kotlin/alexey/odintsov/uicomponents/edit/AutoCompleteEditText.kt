@@ -1,7 +1,6 @@
 package alexey.odintsov.uicomponents.edit
 
 import alexey.odintsov.uicomponents.preview.PreviewDarkAndLightTheme
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -29,6 +28,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
@@ -121,7 +121,7 @@ fun AutoCompleteEditText(
 
 @Composable
 @Preview
-fun PreviewAutoCompleteEditText() {
+private fun PreviewAutoCompleteEditText() {
     val value = remember { mutableStateOf("Text") }
     PreviewDarkAndLightTheme(true) {
         Column {

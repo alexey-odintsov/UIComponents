@@ -5,7 +5,6 @@ import alexey.odintsov.uicomponents.edit.CustomEditText
 import alexey.odintsov.uicomponents.preview.PreviewDarkAndLightTheme
 import alexey.odintsov.uicomponents.table.DesktopTable
 import alexey.odintsov.uicomponents.table.mapAlign
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ContextMenuItem
 import androidx.compose.foundation.background
@@ -36,6 +35,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
