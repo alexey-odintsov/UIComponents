@@ -1,9 +1,7 @@
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.composeHotReload)
-    id("maven-publish")
+    alias(libs.plugins.jetbrains.kotlin.multiplatform)
+    alias(libs.plugins.jetbrains.compose.multiplatform)
+    alias(libs.plugins.jetbrains.kotlin.plugin.compose)
 }
 
 kotlin {
@@ -11,23 +9,17 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(libs.kotlin.datetime)
             implementation(project(":library"))
+            implementation(libs.jetbrains.androidx.lifecycle.viewmodelCompose)
+            implementation(libs.jetbrains.androidx.lifecycle.runtime.compose)
+            implementation(libs.jetbrains.kotlinx.datetime)
         }
         commonTest.dependencies {
-            implementation(libs.kotlin.test)
+            implementation(libs.jetbrains.kotlin.test)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.jetbrains.kotlinx.coroutines.swing)
         }
     }
 }
@@ -37,8 +29,3 @@ compose.desktop {
         mainClass = "alexey.odintsov.uicomponents.testapp.MainKt"
     }
 }
-
-//compose.resources {
-//    publicResClass = true
-//    packageOfResClass = "testApp.resources"
-//}
