@@ -130,7 +130,7 @@ fun <T> DefaultRowWrapContent(
     }
 }
 
-private fun RowScope.getSizeModifier(column: ColumnInfo): Modifier {
+internal fun RowScope.getSizeModifier(column: ColumnInfo): Modifier {
     return when {
         column.size > 0f -> Modifier.width(column.size.dp)
         column.weight != null -> Modifier.weight(column.weight)
