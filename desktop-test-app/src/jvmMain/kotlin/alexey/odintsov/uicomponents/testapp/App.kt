@@ -14,19 +14,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
+data class TabInfo(val index: Int, val title: String, val key: String)
 
 @Composable
 @Preview
 fun App() {
     ThemeManager.AppTheme {
-        var tabIndex by remember { mutableStateOf(1) }
         val tabs = remember {
-            listOf("Buttons", "Table", "Edit", "Dialogs").toMutableStateList()
+            linkedMapOf(
+                "buttons" to TabInfo(0, "Buttons", "buttons"),
+                "table" to TabInfo(1, "Table", "table"),
+                "lazy_table" to TabInfo(2, "Lazy table", "lazy_table"),
+                "edit" to TabInfo(3, "Edit", "edit"),
+                "dialogs" to TabInfo(4, "Dialogs", "dialogs"),
+            )
         }
+        var currentTabKey by remember { mutableStateOf("table") }
 
         Column(
             modifier = Modifier
@@ -38,14 +44,21 @@ fun App() {
             }) {
                 Text("Change theme to ${if (ThemeManager.isDark) "light" else "dark"}!")
             }
-            TabsPanel(tabIndex, tabs, { i -> tabIndex = i })
+
+            val tabsList = tabs.values.toList()
+            TabsPanel(
+                tabIndex = tabs[currentTabKey]?.index ?: 0,
+                tabs = tabsList.map { it.title },
+                callback = { i -> currentTabKey = tabsList[i].key }
+            )
 
             Box(Modifier.weight(1f)) {
-                when (tabIndex) {
-                    0 -> ButtonsScreen()
-                    1 -> TableScreen()
-                    2 -> EditScreen()
-                    3 -> DialogsScreen()
+                when (currentTabKey) {
+                    "buttons" -> ButtonsScreen()
+                    "table" -> TableScreen()
+                    "lazy_table" -> LazyTableScreen()
+                    "edit" -> EditScreen()
+                    "dialogs" -> DialogsScreen()
                 }
             }
             StatusBar(progress = 0.5f, statusText = "Loading")
