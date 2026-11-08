@@ -190,7 +190,7 @@ private fun PreviewTable2() {
     val items = (1..100).map {
         val message = ('A'..'z').map { it }.shuffled().subList(0, 40).joinToString("")
         val values = hashMapOf<String, String>(
-            columns[0].key to System.currentTimeMillis().toString(),
+            columns[0].key to (1_700_000_000_000L + it).toString(),
             columns[1].key to tags.random(),
             columns[2].key to levels.random(),
             columns[3].key to message,

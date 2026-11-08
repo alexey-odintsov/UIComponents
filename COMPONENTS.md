@@ -6,6 +6,8 @@ This document describes the UI components available in this library and their pl
 
 ## Platform Support Comparison
 
+Kotlin/JS and Kotlin/Wasm browser targets include the common components listed below, with browser pointer cursors and theme support. Components in `jvmMain` remain desktop-only.
+
 | Component | Common | Desktop (JVM) | Android | Description |
 | :--- | :---: | :---: | :---: | :--- |
 | **Common Components** | | | | |
@@ -28,7 +30,7 @@ This document describes the UI components available in this library and their pl
 | [ColorPickerDialog](library/src/jvmMain/kotlin/alexey/odintsov/uicomponents/dialogs/ColorPickerDialog.kt) | — | ✅ | — | Visual color selection dialog |
 | [DesktopDialogWindow](library/src/jvmMain/kotlin/alexey/odintsov/uicomponents/dialogs/DesktopDialogWindow.kt) | — | ✅ | — | Base for custom desktop windows |
 | **Layout & Navigation** | | | | |
-| [TabsPanel](library/src/jvmMain/kotlin/alexey/odintsov/uicomponents/tabs/TabsPanel.kt) | — | ✅ | — | Tabbed interface management |
+| [TabsPanel](library/src/commonMain/kotlin/alexey/odintsov/uicomponents/tabs/TabsPanel.kt) | — | ✅ | — | Tabbed interface management |
 | [CustomDropDown](library/src/jvmMain/kotlin/alexey/odintsov/uicomponents/CustomDropDown.kt) | — | ✅ | — | Customizable dropdown menu |
 | **Other** | | | | |
 | [DesktopTable](library/src/jvmMain/kotlin/alexey/odintsov/uicomponents/table/DesktopTable.kt) | — | ✅ | — | Desktop-optimized table |

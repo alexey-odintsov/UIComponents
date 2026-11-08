@@ -14,6 +14,14 @@ val artifact = "uicomponents"
 version = "0.0.3"
 
 kotlin {
+    js {
+        browser()
+    }
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+    }
+
     jvm {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_21)
