@@ -36,4 +36,5 @@ plugins {
 rootProject.name = "uicomponents"
 include(":library")
 include(":desktop-test-app")
+include(":web-test-app")
 include(":android-test-app")
